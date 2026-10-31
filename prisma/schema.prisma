@@ -1,0 +1,240 @@
+// SQLite не підтримує enum і масиви в Prisma — статуси зберігаються рядками,
+// допустимі значення описані в server/lib/constants.ts.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model University {
+  id           String @id // short-код, напр. "KPI"
+  name         String
+  city         String
+  emailDomains String // через кому: "kpi.ua,lll.kpi.ua"
+
+  users User[]
+  teams Team[]
+}
+
+model User {
+  id             String   @id @default(cuid())
+  faceitId       String   @unique
+  faceitNickname String
+  avatar         String?
+  faceitLevel    Int      @default(0)
+  faceitElo      Int      @default(0)
+  faceitKd       Float    @default(0)
+  faceitWinrate  Int      @default(0)
+  faceitHsPercent Int     @default(0)
+  faceitMatches  Int      @default(0)
+  faceitSyncedAt DateTime?
+
+  fullName     String?
+  telegram     String?
+  role         String? // CS2Role
+  universityId String?
+  university   University? @relation(fields: [universityId], references: [id])
+
+  verificationStatus String  @default("NONE") // NONE | EMAIL_SENT | PENDING_REVIEW | VERIFIED | REJECTED
+  studentEmail       String?
+  verifiedAt         DateTime?
+
+  discordId       String? @unique
+  discordUsername String?
+
+  isAdmin   Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  sessions     Session[]
+  emailCodes   EmailCode[]
+  studentCards StudentCard[]
+  membership   TeamMember?
+  captainOf    Team[]            @relation("TeamCaptain")
+  invites      TeamInvite[]
+  lftPosts     LftPost[]
+  matchStats   PlayerMatchStat[]
+  adminLogs    AdminLog[]
+}
+
+model Session {
+  id        String   @id // sha256 від токена з cookie
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+model EmailCode {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  email     String
+  codeHash  String
+  attempts  Int      @default(0)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+model StudentCard {
+  id         String    @id @default(cuid())
+  userId     String
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  filePath   String? // null після рішення адміна (файл видалено)
+  mimeType   String
+  status     String    @default("PENDING") // PENDING | APPROVED | REJECTED
+  comment    String?
+  reviewedBy String?
+  reviewedAt DateTime?
+  createdAt  DateTime  @default(now())
+
+  @@index([status])
+}
+
+model Team {
+  id               String     @id @default(cuid())
+  name             String     @unique
+  tag              String
+  universityId     String
+  university       University @relation(fields: [universityId], references: [id])
+  captainId        String
+  captain          User       @relation("TeamCaptain", fields: [captainId], references: [id])
+  status           String     @default("DRAFT") // DRAFT | PENDING | APPROVED | REJECTED
+  group            String?
+  inviteCode       String     @unique
+  discordRoleId    String?
+  discordChannelId String?
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
+
+  members   TeamMember[]
+  invites   TeamInvite[]
+  lftPosts  LftPost[]
+  matchesA  Match[]           @relation("MatchTeamA")
+  matchesB  Match[]           @relation("MatchTeamB")
+  stats     PlayerMatchStat[]
+}
+
+model TeamMember {
+  id       String   @id @default(cuid())
+  teamId   String
+  team     Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  userId   String   @unique
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  slot     String   @default("MAIN") // MAIN | SUB
+  joinedAt DateTime @default(now())
+
+  @@index([teamId])
+}
+
+model TeamInvite {
+  id        String   @id @default(cuid())
+  teamId    String
+  team      Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  direction String // TEAM_TO_PLAYER | PLAYER_TO_TEAM
+  status    String   @default("PENDING") // PENDING | ACCEPTED | DECLINED | CANCELLED
+  message   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId, status])
+  @@index([teamId, status])
+}
+
+model LftPost {
+  id          String   @id @default(cuid())
+  authorType  String // PLAYER | TEAM
+  userId      String?
+  user        User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  teamId      String?
+  team        Team?    @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  roles       String // через кому, CS2Role
+  description String   @default("")
+  minLevel    Int?
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([authorType, userId])
+  @@unique([authorType, teamId])
+}
+
+model Match {
+  id            String    @id @default(cuid())
+  stage         String
+  group         String?
+  teamAId       String
+  teamA         Team      @relation("MatchTeamA", fields: [teamAId], references: [id])
+  teamBId       String
+  teamB         Team      @relation("MatchTeamB", fields: [teamBId], references: [id])
+  scoreA        Int       @default(0)
+  scoreB        Int       @default(0)
+  bestOf        Int       @default(1)
+  status        String    @default("SCHEDULED") // SCHEDULED | LIVE | FINISHED
+  scheduledAt   DateTime?
+  faceitMatchId String?   @unique
+  source        String    @default("MANUAL") // MANUAL | FACEIT
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  maps  MatchMap[]
+  stats PlayerMatchStat[]
+
+  @@index([status, scheduledAt])
+}
+
+model MatchMap {
+  id      String @id @default(cuid())
+  matchId String
+  match   Match  @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  order   Int
+  mapName String
+  scoreA  Int
+  scoreB  Int
+
+  stats PlayerMatchStat[]
+
+  @@unique([matchId, order])
+}
+
+model PlayerMatchStat {
+  id        String    @id @default(cuid())
+  matchId   String
+  match     Match     @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  mapId     String
+  map       MatchMap  @relation(fields: [mapId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  teamId    String
+  team      Team      @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  kills     Int
+  deaths    Int
+  assists   Int
+  adr       Float
+  hsPercent Float
+  mvps      Int       @default(0)
+  won       Boolean
+
+  @@unique([mapId, userId])
+  @@index([userId])
+}
+
+model AdminLog {
+  id        String   @id @default(cuid())
+  adminId   String
+  admin     User     @relation(fields: [adminId], references: [id])
+  action    String
+  target    String?
+  details   String?
+  createdAt DateTime @default(now())
+}

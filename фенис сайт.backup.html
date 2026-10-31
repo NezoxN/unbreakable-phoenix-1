@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNBREAKABLE PHOENIX 2026 | Ultimate Esports Experience</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Rajdhani:wght@300;500;700&display=swap"
+        rel="stylesheet">
+
+    <style>
+        /* --- CORE SETTINGS & VARIABLES --- */
+        :root {
+            --gold-primary: #FFD700;
+            --gold-glow: #ffcc00;
+            --gold-dim: #b8860b;
+            --black-bg: #050505;
+            --dark-overlay: rgba(0, 0, 0, 0.85);
+            --glass-border: rgba(255, 215, 0, 0.15);
+            --glass-bg: rgba(20, 20, 20, 0.4);
+            --neon-red: #ff3333;
+            --font-head: 'Oswald', sans-serif;
+            --font-body: 'Rajdhani', sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            cursor: none;
+            /* Скрываем стандартный курсор для кастомного */
+        }
+
+        body {
+            margin: 0;
+            background-color: var(--black-bg);
+            color: #fff;
+            font-family: var(--font-body);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* --- CUSTOM CURSOR (ПРИЦЕЛ) --- */
+        .cursor {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--gold-primary);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: width 0.2s, height 0.2s, background 0.2s;
+            mix-blend-mode: difference;
+        }
+
+        .cursor-dot {
+            width: 4px;
+            height: 4px;
+            background: var(--gold-primary);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+        }
+
+        body:hover .cursor {
+            opacity: 1;
+        }
+
+        .hovered .cursor {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 215, 0, 0.1);
+            border-color: var(--gold-glow);
+        }
+
+        /* --- SCROLLBAR --- */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #000;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--gold-dim);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--gold-primary);
+        }
+
+        /* --- PARTICLES CANVAS --- */
+        #particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* --- NAVIGATION --- */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 4%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(5, 5, 5, 0.8);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid var(--glass-border);
+            z-index: 1000;
+            transition: 0.4s;
+        }
+
+        .logo {
+            font-family: var(--font-head);
+            font-size: 1.8rem;
+            color: var(--gold-primary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-items a {
+            color: #aaa;
+            text-decoration: none;
+            margin-left: 30px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: 0.3s;
+            position: relative;
+        }
+
+        .nav-items a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gold-primary);
+            transition: 0.3s;
+        }
+
+        .nav-items a:hover {
+            color: #fff;
+        }
+
+        .nav-items a:hover::after {
+            width: 100%;
+        }
+
+        .btn-gold {
+            background: transparent;
+            color: var(--gold-primary);
+            border: 1px solid var(--gold-primary);
+            padding: 10px 30px;
+            font-family: var(--font-head);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: 0.4s;
+            position: relative;
+            overflow: hidden;
+            margin-left: 30px;
+        }
+
+        .btn-gold::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--gold-primary);
+            transition: 0.4s;
+            z-index: -1;
+        }
+
+        .btn-gold:hover {
+            color: #000;
+            box-shadow: 0 0 25px rgba(255, 215, 0, 0.5);
+        }
+
+        .btn-gold:hover::before {
+            left: 0;
+        }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            text-align: center;
+            padding-top: 60px;
+        }
+
+        /* PHOENIX ANIMATION */
+        .phoenix-container {
+            width: 600px;
+            max-width: 90vw;
+            filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.2));
+            margin-bottom: -20px;
+        }
+
+        svg path {
+            fill: none;
+            stroke: var(--gold-primary);
+            stroke-width: 30px;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-dasharray: 10000;
+            stroke-dashoffset: 10000;
+            filter: drop-shadow(0 0 5px var(--gold-primary));
+        }
+
+        .animate-phoenix path {
+            animation: draw 5s ease-out forwards;
+        }
+
+        @keyframes draw {
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+
+        /* GLITCH TEXT EFFECT */
+        .glitch-wrapper {
+            position: relative;
+            margin-bottom: 10px;
+        }
+
+        .hero-title {
+            font-family: var(--font-head);
+            font-size: 5rem;
+            line-height: 1;
+            color: #fff;
+            text-transform: uppercase;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-title::before,
+        .hero-title::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--black-bg);
+        }
+
+        .hero-title::before {
+            left: 2px;
+            text-shadow: -1px 0 red;
+            clip-path: inset(44% 0 61% 0);
+            animation: glitch-anim 2s infinite linear alternate-reverse;
+        }
+
+        .hero-title::after {
+            left: -2px;
+            text-shadow: -1px 0 blue;
+            clip-path: inset(54% 0 11% 0);
+            animation: glitch-anim-2 3s infinite linear alternate-reverse;
+        }
+
+        @keyframes glitch-anim {
+            0% {
+                clip-path: inset(86% 0 6% 0);
+            }
+
+            20% {
+                clip-path: inset(16% 0 49% 0);
+            }
+
+            40% {
+                clip-path: inset(2% 0 83% 0);
+            }
+
+            60% {
+                clip-path: inset(79% 0 19% 0);
+            }
+
+            80% {
+                clip-path: inset(23% 0 55% 0);
+            }
+
+            100% {
+                clip-path: inset(84% 0 6% 0);
+            }
+        }
+
+        @keyframes glitch-anim-2 {
+            0% {
+                clip-path: inset(11% 0 61% 0);
+            }
+
+            20% {
+                clip-path: inset(69% 0 10% 0);
+            }
+
+            40% {
+                clip-path: inset(14% 0 28% 0);
+            }
+
+            60% {
+                clip-path: inset(65% 0 31% 0);
+            }
+
+            80% {
+                clip-path: inset(18% 0 71% 0);
+            }
+
+            100% {
+                clip-path: inset(8% 0 13% 0);
+            }
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--gold-primary);
+            letter-spacing: 8px;
+            margin-bottom: 40px;
+            opacity: 0;
+            animation: fadeUp 1s ease-out 4s forwards;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            opacity: 0.6;
+        }
+
+        .mouse {
+            width: 20px;
+            height: 35px;
+            border: 2px solid var(--gold-primary);
+            border-radius: 15px;
+            margin-bottom: 5px;
+            position: relative;
+        }
+
+        .mouse::before {
+            content: '';
+            width: 4px;
+            height: 4px;
+            background: var(--gold-primary);
+            position: absolute;
+            top: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 50%;
+            animation: scrollMouse 2s infinite;
+        }
+
+        @keyframes scrollMouse {
+            0% {
+                top: 5px;
+                opacity: 1;
+            }
+
+            100% {
+                top: 20px;
+                opacity: 0;
+            }
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* --- SECTIONS COMMON --- */
+        section {
+            padding: 100px 10%;
+            position: relative;
+        }
+
+        .section-header {
+            margin-bottom: 60px;
+            border-left: 4px solid var(--gold-primary);
+            padding-left: 20px;
+        }
+
+        .section-title {
+            font-family: var(--font-head);
+            font-size: 3.5rem;
+            text-transform: uppercase;
+            color: #fff;
+            margin: 0;
+        }
+
+        .section-desc {
+            color: #ccc;
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin-top: 10px;
+        }
+
+        /* --- CARDS (Glassmorphism) --- */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 4px;
+            position: relative;
+            transition: 0.4s;
+            overflow: hidden;
+        }
+
+        .glass-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, transparent 100%);
+            opacity: 0;
+            transition: 0.4s;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--gold-primary);
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+        }
+
+        .glass-card:hover::after {
+            opacity: 1;
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            color: var(--gold-primary);
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-family: var(--font-head);
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+
+        .card-text {
+            color: #aaa;
+            line-height: 1.6;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 20px;
+        }
+
+        .stat-item span {
+            display: block;
+            font-size: 0.8rem;
+            color: #666;
+            text-transform: uppercase;
+        }
+
+        .stat-item b {
+            font-size: 1.2rem;
+            color: var(--gold-primary);
+        }
+
+        /* --- SAFETY SECTION (Red Accent) --- */
+        .safety-section {
+            background: linear-gradient(180deg, var(--black-bg) 0%, #150505 100%);
+            border-top: 1px solid #331111;
+        }
+
+        .safety-card {
+            border-color: rgba(255, 50, 50, 0.2);
+        }
+
+        .safety-card:hover {
+            border-color: var(--neon-red);
+            box-shadow: 0 0 20px rgba(255, 50, 50, 0.2);
+        }
+
+        .alert-badge {
+            display: inline-block;
+            background: rgba(255, 50, 50, 0.1);
+            color: var(--neon-red);
+            border: 1px solid var(--neon-red);
+            padding: 5px 10px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(255, 51, 51, 0.4);
+            }
+
+            70% {
+                box-shadow: 0 0 0 10px rgba(255, 51, 51, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(255, 51, 51, 0);
+            }
+        }
+
+        /* --- COUNTDOWN --- */
+        .countdown-section {
+            text-align: center;
+            padding: 80px 0;
+            background: radial-gradient(circle, #1a1a1a 0%, #000 100%);
+        }
+
+        .timer {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 40px;
+        }
+
+        .timer-block {
+            text-align: center;
+        }
+
+        .time-val {
+            font-family: var(--font-head);
+            font-size: 4rem;
+            color: var(--gold-primary);
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .time-label {
+            font-size: 0.9rem;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            border-top: 1px solid #222;
+            padding: 60px 10%;
+            background: #020202;
+            text-align: center;
+        }
+
+        .partners-grid {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 40px;
+            margin-bottom: 40px;
+            opacity: 0.6;
+        }
+
+        .partner-logo {
+            font-family: var(--font-head);
+            font-size: 1.5rem;
+            border: 1px solid #333;
+            padding: 10px 25px;
+            color: #fff;
+            transition: 0.3s;
+        }
+
+        .partner-logo:hover {
+            border-color: var(--gold-primary);
+            color: var(--gold-primary);
+            text-shadow: 0 0 10px var(--gold-primary);
+        }
+
+        /* --- MODAL --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 10000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: 0.4s;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal-box {
+            background: #111;
+            border: 1px solid var(--gold-primary);
+            padding: 40px;
+            width: 500px;
+            max-width: 90%;
+            position: relative;
+            transform: scale(0.8);
+            transition: 0.4s;
+            box-shadow: 0 0 50px rgba(255, 215, 0, 0.1);
+        }
+
+        .modal-overlay.active .modal-box {
+            transform: scale(1);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 2rem;
+            color: #666;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .close-modal:hover {
+            color: #fff;
+        }
+
+        .modal-input {
+            width: 100%;
+            background: #050505;
+            border: 1px solid #333;
+            padding: 15px;
+            color: #fff;
+            margin-bottom: 20px;
+            font-family: var(--font-body);
+        }
+
+        .modal-input:focus {
+            outline: none;
+            border-color: var(--gold-primary);
+        }
+
+        /* Responsive */
+        @media(max-width: 768px) {
+            .hero-title {
+                font-size: 3rem;
+            }
+
+            .phoenix-container {
+                width: 100%;
+            }
+
+            .nav-items {
+                display: none;
+            }
+
+            .timer {
+                gap: 15px;
+            }
+
+            .time-val {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="cursor"></div>
+    <div class="cursor-dot"></div>
+
+    <canvas id="particles"></canvas>
+
+    <nav>
+        <div class="logo">
+            <span style="color:white">UNBREAKABLE</span> PHOENIX
+        </div>
+        <div class="nav-items">
+            <a href="#about" class="hover-target">МИССИЯ</a>
+            <a href="#format" class="hover-target">ФОРМАТ</a>
+            <a href="#safety" class="hover-target">БЕЗОПАСНОСТЬ</a>
+        </div>
+        <button class="btn-gold hover-target" onclick="openModal()">РЕГИСТРАЦИЯ</button>
+    </nav>
+
+    <section class="hero">
+        <div class="phoenix-container hover-target">
+            <svg id="phoenix-svg" version="1.0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1408 768"
+                preserveAspectRatio="xMidYMid meet">
+                <g transform="translate(0.000000,768.000000) scale(0.100000,-0.100000)">
+                    <path
+                        d="M5849 6508 c-82 -55 -214 -186 -268 -266 -58 -87 -108 -198 -139 -312 -22 -82 -26 -114 -25 -235 1 -120 6 -157 31 -260 33 -133 72 -236 127 -341 l37 -69 -37 40 c-56 62 -119 153 -158 230 -102 203 -140 378 -136 627 3 165 1 177 -39 178 -23 0 -65 -52 -110 -138 -81 -152 -120 -333 -108 -505 18 -286 100 -486 287 -705 26 -31 45 -60 42 -66 -3 -5 -1 -6 5 -2 6 4 38 -17 71 -48 33 -31 88 -76 122 -101 76 -56 70 -57 -18 -4 -220 135 -392 332 -544 623 -58 112 -85 140 -113 117 -24 -20 -27 -72 -11 -212 58 -518 312 -827 848 -1029 48 -18 86 -34 84 -36 -7 -7 -136 17 -200 38 -53 17 -65 24 -50 30 11 5 7 6 -14 2 -24 -4 -51 5 -115 36 -45 23 -99 54 -118 69 -73 54 -130 91 -143 91 -19 0 -37 -21 -37 -42 0 -25 44 -111 88 -173 106 -150 244 -268 391 -337 91 -42 145 -57 418 -118 143 -32 188 -47 264 -86 234 -121 331 -323 264 -554 -20 -73 -80 -182 -177 -329 -111 -166 -173 -286 -196 -383 -15 -59 -20 -68 -25 -48 -21 78 2 234 57 380 69 187 88 267 82 351 -9 130 -60 238 -148 313 -68 58 -116 42 -96 -33 6 -19 8 -80 6 -136 -4 -119 -25 -172 -133 -330 -131 -193 -170 -306 -163 -475 l5 -105 -21 45 c-18 40 -21 63 -20 195 0 96 8 195 20 275 18 112 18 133 6 209 -14 94 -15 96 -78 186 -54 77 -71 88 -105 72 -21 -11 -25 -21 -30 -87 -7 -80 -25 -130 -107 -295 -87 -174 -110 -280 -92 -416 13 -98 47 -177 113 -264 52 -68 80 -89 108 -80 29 10 23 49 -16 104 -75 104 -115 251 -101 364 8 54 59 194 106 288 18 35 43 90 55 123 27 71 35 62 42 -42 4 -56 -1 -113 -18 -207 -16 -90 -23 -167 -23 -250 1 -106 4 -129 29 -195 15 -41 50 -108 78 -148 82 -119 224 -229 278 -215 37 10 32 40 -25 140 -90 160 -118 321 -80 466 20 77 27 91 132 251 92 141 141 248 142 311 1 35 2 37 12 20 6 -10 11 -60 11 -110 0 -85 -3 -100 -61 -262 -50 -141 -64 -193 -74 -282 -11 -102 -10 -114 11 -197 16 -67 34 -108 71 -165 28 -41 50 -86 50 -100 0 -38 52 -178 92 -249 50 -87 110 -158 188 -220 100 -81 107 -85 135 -72 33 15 32 38 -9 130 -92 209 -132 399 -116 542 9 81 1 110 -30 110 -31 0 -48 -38 -67 -146 -17 -101 -17 -101 8 -222 14 -67 24 -122 22 -122 -13 0 -69 112 -95 190 -28 85 -31 108 -32 215 0 191 29 265 223 560 120 182 165 284 181 412 22 174 -36 338 -162 459 -126 121 -261 183 -513 234 -275 55 -409 109 -525 210 -33 29 -59 54 -58 56 2 1 57 -16 123 -38 137 -46 226 -58 431 -58 155 0 182 8 171 51 -10 39 -93 86 -268 153 -311 120 -455 200 -597 331 -117 108 -207 259 -256 427 -23 79 -21 80 22 15 131 -196 309 -350 558 -482 60 -31 155 -82 211 -112 114 -60 146 -65 151 -20 8 64 -137 223 -348 382 -306 232 -469 525 -473 850 -2 114 16 265 32 265 4 0 12 -42 19 -93 29 -230 136 -460 302 -647 89 -101 305 -310 319 -310 26 0 51 22 51 44 0 31 -74 198 -159 360 -39 73 -82 164 -97 201 -101 270 -100 540 1 762 33 71 114 197 122 189 2 -2 -12 -57 -32 -122 -66 -216 -58 -459 21 -652 86 -210 167 -321 360 -497 216 -197 273 -260 314 -349 21 -44 44 -109 51 -144 13 -71 7 -212 -13 -287 -15 -55 -4 -78 36 -83 64 -8 91 74 90 273 0 125 -2 133 -37 223 -64 163 -118 229 -365 446 -130 115 -207 200 -196 218 4 7 4 10 -1 6 -11 -10 -82 103 -121 192 -18 42 -43 124 -54 182 -20 99 -21 118 -11 250 9 115 17 163 45 248 34 106 102 254 137 299 33 42 20 101 -22 101 -9 0 -45 -19 -80 -42z" />
+                    <path
+                        d="M8167 6533 c-16 -16 -4 -61 37 -133 53 -94 120 -264 140 -352 27 -120 30 -271 8 -383 -57 -280 -167 -443 -482 -713 -168 -145 -259 -292 -288 -467 -14 -87 -14 -104 1 -197 9 -55 25 -115 35 -132 22 -38 60 -46 86 -17 17 19 18 25 5 68 -9 31 -14 96 -14 183 1 124 3 140 28 199 35 84 119 192 209 271 177 153 256 231 322 320 92 123 159 258 193 390 25 94 28 122 27 265 0 141 -3 171 -26 250 -14 50 -33 108 -42 129 -9 22 -15 41 -13 42 9 9 100 -146 127 -218 66 -169 74 -211 74 -363 0 -101 -4 -158 -17 -205 -32 -121 -97 -283 -155 -389 -32 -59 -75 -144 -96 -191 -20 -47 -42 -93 -47 -102 -13 -25 -11 -72 3 -86 7 -7 21 -12 31 -12 32 0 352 330 420 433 104 155 176 341 203 519 8 56 17 104 19 106 8 8 25 -105 31 -206 16 -254 -71 -498 -252 -713 -63 -74 -126 -130 -249 -223 -110 -82 -297 -283 -318 -339 -10 -26 10 -57 36 -57 12 0 53 18 92 40 38 23 123 68 189 101 67 34 166 91 221 127 119 80 289 245 360 349 26 40 50 71 52 70 8 -9 -39 -142 -77 -217 -123 -246 -329 -415 -670 -550 -58 -23 -145 -58 -195 -78 -107 -42 -157 -73 -176 -108 -12 -24 -12 -28 11 -46 23 -19 37 -20 215 -16 176 4 198 7 300 36 61 17 127 38 149 47 21 9 40 14 42 12 2 -2 -28 -30 -68 -62 -92 -73 -224 -138 -325 -159 -219 -47 -423 -102 -491 -133 -190 -86 -370 -261 -466 -452 -42 -83 -76 -223 -77 -315 -2 -138 59 -314 141 -410 77 -88 130 -164 170 -244 36 -71 44 -98 52 -175 14 -130 -10 -259 -69 -386 -24 -52 -45 -92 -48 -89 -3 2 0 31 6 64 24 127 -10 305 -78 409 -26 40 -106 138 -151 185 -49 50 -116 166 -140 240 -29 89 -36 272 -14 355 27 101 27 103 -2 116 -23 11 -29 9 -52 -12 -14 -13 -48 -54 -75 -90 -159 -215 -204 -517 -114 -767 14 -38 54 -120 89 -183 109 -193 140 -325 107 -458 l-14 -54 -22 71 c-12 39 -34 90 -48 114 -25 43 -125 143 -226 227 -72 60 -105 109 -135 199 -67 203 -47 401 60 615 65 127 144 234 359 480 218 250 292 351 367 502 81 162 107 268 108 430 0 180 -40 315 -178 590 -41 82 -75 163 -76 180 0 16 -4 32 -8 35 -4 3 -10 35 -14 71 -15 146 73 295 216 366 49 25 67 28 154 28 112 1 123 8 112 67 -11 59 -61 124 -118 152 -45 22 -65 26 -145 26 -68 0 -103 5 -126 17 -42 22 -158 28 -231 13 -33 -7 -116 -41 -188 -78 -123 -63 -133 -66 -213 -70 -70 -4 -95 -1 -148 18 -102 36 -137 16 -111 -61 36 -107 140 -195 252 -214 23 -4 42 -8 42 -10 0 -3 -89 -196 -101 -218 -11 -21 -36 -123 -55 -232 -11 -65 -12 -100 -3 -185 17 -161 72 -285 212 -485 66 -94 137 -227 137 -257 0 -8 6 -20 13 -27 8 -8 12 -49 11 -134 0 -101 -4 -131 -22 -177 -25 -62 -27 -91 -10 -108 32 -32 78 8 155 137 94 156 128 285 121 454 -4 97 -9 122 -37 188 -17 42 -57 114 -88 160 -109 165 -150 280 -138 391 6 51 5 57 -15 68 -45 24 -90 -51 -90 -150 0 -98 34 -187 127 -328 30 -46 71 -118 91 -160 33 -70 36 -83 39 -186 3 -72 -1 -128 -10 -160 l-13 -50 -23 88 c-29 108 -67 182 -181 351 -96 143 -134 222 -156 324 -35 168 0 368 105 587 34 70 61 140 61 156 0 33 -18 43 -92 53 -26 3 -50 10 -53 16 -4 5 -10 7 -15 4 -11 -7 -60 15 -60 27 0 4 29 8 64 8 77 0 108 11 269 91 107 53 134 62 193 66 55 4 80 1 123 -16 40 -16 73 -21 130 -20 86 1 141 -9 119 -22 -7 -5 -24 -9 -38 -9 -13 0 -62 -18 -107 -41 -178 -88 -285 -276 -268 -473 9 -108 30 -167 135 -381 103 -210 129 -292 137 -431 16 -273 -79 -482 -371 -819 -301 -347 -370 -439 -451 -600 -84 -166 -99 -235 -99 -435 0 -154 2 -170 27 -240 51 -139 73 -168 275 -348 65 -59 88 -87 117 -145 48 -98 56 -186 25 -274 -28 -82 -25 -107 16 -111 27 -3 39 6 90 61 98 105 162 263 164 403 1 87 -60 242 -185 474 -44 82 -62 142 -74 254 -11 92 2 205 32 291 14 37 15 38 20 15 45 -220 79 -289 227 -464 131 -154 156 -201 172 -329 10 -83 10 -107 -6 -188 -10 -52 -32 -129 -48 -171 -32 -80 -32 -100 -1 -117 30 -16 80 15 174 109 67 66 94 102 122 160 59 124 89 240 92 357 l3 102 43 49 c24 27 57 76 74 108 25 50 30 73 33 154 3 61 -2 125 -12 179 -17 86 -20 241 -7 276 6 15 10 6 15 -33 7 -57 56 -156 131 -267 26 -38 57 -90 70 -115 28 -56 49 -176 40 -231 -10 -58 -56 -164 -99 -229 -42 -63 -43 -71 -16 -95 24 -22 40 -16 142 52 88 59 172 158 219 258 71 152 75 264 19 535 -40 190 -42 314 -9 412 11 34 27 70 34 81 12 17 13 12 14 -43 0 -76 33 -151 126 -290 117 -174 148 -272 127 -405 -14 -90 -46 -172 -98 -250 -78 -117 -77 -114 -64 -130 23 -28 59 -17 104 30 107 109 165 238 173 381 9 152 -26 249 -165 462 -96 147 -107 182 -87 295 7 42 25 98 39 123 32 58 32 71 1 86 -21 9 -32 6 -81 -23 -81 -49 -159 -139 -207 -238 -40 -82 -41 -88 -45 -205 -3 -94 1 -146 17 -231 43 -220 53 -300 48 -375 -5 -78 -34 -168 -67 -210 l-19 -25 6 51 c13 118 -42 279 -140 408 -92 120 -121 214 -115 364 2 72 0 86 -14 96 -25 16 -62 -9 -122 -80 -65 -79 -85 -128 -97 -232 -8 -71 -7 -102 6 -162 9 -41 19 -120 22 -175 5 -89 3 -106 -17 -152 -35 -83 -43 -84 -79 -6 -39 82 -83 150 -172 263 -81 103 -106 152 -125 239 -18 85 -18 144 1 239 41 208 227 439 437 544 72 36 281 93 481 132 222 43 447 201 585 411 82 124 98 185 56 202 -19 7 -31 1 -144 -80 -91 -65 -192 -112 -325 -150 -91 -26 -184 -44 -175 -34 3 4 55 26 115 50 286 115 476 258 620 463 106 151 176 363 197 596 13 137 6 178 -30 178 -26 0 -46 -25 -78 -95 -122 -267 -361 -542 -579 -664 l-40 -23 31 29 c17 15 70 62 118 103 221 190 344 398 397 671 43 223 10 459 -91 664 -91 183 -151 182 -142 -3 5 -120 -20 -334 -54 -456 -32 -113 -115 -279 -192 -383 -78 -104 -92 -112 -49 -26 45 89 116 281 134 363 24 110 29 308 9 398 -26 117 -83 264 -138 356 -107 179 -341 370 -391 319z" />
+                    <path
+                        d="M5146 3647 c-30 -35 -70 -94 -87 -131 -30 -63 -31 -72 -27 -159 5 -109 20 -148 103 -262 65 -90 93 -146 103 -207 28 -162 182 61 185 267 1 72 -22 139 -74 216 -73 109 -83 136 -83 229 -1 47 -5 91 -9 98 -19 29 -55 12 -111 -51z m87 -290 c73 -109 92 -184 72 -276 l-7 -31 -35 53 c-20 28 -51 74 -69 100 -19 26 -38 65 -44 85 -13 50 -13 128 2 169 l12 33 15 -37 c8 -21 32 -64 54 -96z" />
+                    <path
+                        d="M8892 3698 c-7 -7 -12 -44 -12 -95 0 -92 -6 -109 -85 -238 -52 -85 -67 -135 -67 -234 -1 -58 5 -92 25 -142 31 -81 72 -145 97 -152 26 -7 60 20 60 47 0 45 33 118 88 194 30 42 69 104 86 137 28 55 31 68 31 155 0 85 -3 102 -31 160 -35 74 -129 180 -160 180 -11 0 -25 -5 -32 -12z m117 -333 c1 -64 -29 -129 -106 -231 l-58 -78 -6 49 c-9 84 5 136 65 231 30 48 61 103 68 123 l12 36 12 -40 c7 -22 13 -62 13 -90z" />
+                </g>
+            </svg>
+        </div>
+
+        <div class="glitch-wrapper">
+            <h1 class="hero-title hover-target" data-text="UNBREAKABLE PHOENIX">UNBREAKABLE PHOENIX</h1>
+        </div>
+
+        <div class="hero-subtitle">KHARKIV STUDENT LEAGUE 2026</div>
+
+        <div class="scroll-indicator">
+            <div class="mouse"></div>
+            <span>SCROLL</span>
+        </div>
+    </section>
+
+    <section id="about">
+        <div class="section-header">
+            <h2 class="section-title">THE MISSION</h2>
+            <p class="section-desc">More than a game. A symbol of resilience.</p>
+        </div>
+
+        <div class="cards-grid">
+            <div class="glass-card hover-target">
+                <div class="card-icon">⚡</div>
+                <h3 class="card-title">Энергия Города</h3>
+                <p class="card-text">Харьков остается столицей студенчества. Мы создаем экосистему, объединяющую 15+
+                    ВУЗов города в единой киберспортивной лиге.</p>
+                <div class="stat-row">
+                    <div class="stat-item"><span>Teams</span><b>16+</b></div>
+                    <div class="stat-item"><span>Format</span><b>LAN</b></div>
+                </div>
+            </div>
+
+            <div class="glass-card hover-target">
+                <div class="card-icon">🎯</div>
+                <h3 class="card-title">Благотворительность</h3>
+                <p class="card-text">Финальная цель турнира [cite: 260] — передача пикапа или тяжелого дрона для Сил
+                    Обороны прямо на сцене Гранд-Финала.</p>
+                <div class="stat-row">
+                    <div class="stat-item"><span>Goal</span><b>Pickup</b></div>
+                    <div class="stat-item"><span>Impact</span><b>Real</b></div>
+                </div>
+            </div>
+
+            <div class="glass-card hover-target">
+                <div class="card-icon">🏆</div>
+                <h3 class="card-title">Призовой Фонд</h3>
+                <p class="card-text">Профессиональные девайсы от GamePro, сертификаты от партнеров и уникальный стальной
+                    кубок в форме Феникса.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="format" style="background: rgba(10,10,10,0.5);">
+        <div class="section-header">
+            <h2 class="section-title">TOURNAMENT STAGES</h2>
+            <p class="section-desc">Path to the Grand Final[cite: 343, 345].</p>
+        </div>
+
+        <div class="cards-grid">
+            <div class="glass-card hover-target">
+                <h3 class="card-title" style="color: var(--gold-primary)">01 / QUALIFIERS</h3>
+                <p class="card-text">
+                    • <b>Format:</b> Online (Faceit)<br>
+                    • <b>System:</b> Single Elimination<br>
+                    • <b>Matches:</b> Bo1 & Bo3 (Semis)<br>
+                    • <b>Anti-Cheat:</b> Faceit AC Required
+                </p>
+            </div>
+
+            <div class="glass-card hover-target"
+                style="border-color: var(--gold-primary); background: rgba(255, 215, 0, 0.05);">
+                <h3 class="card-title" style="color: #fff">02 / LAN FINAL</h3>
+                <p class="card-text">
+                    • <b>Location:</b> Safe Shelter (Харьков)<br>
+                    • <b>Setup:</b> 240Hz Monitors, Stage Light<br>
+                    • <b>Media:</b> Professional Broadcast<br>
+                    • <b>Entry:</b> Top 4 Teams
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="countdown-section">
+        <h2 class="section-title" style="font-size: 2rem; margin-bottom: 20px;">GRAND FINAL STARTS IN</h2>
+        <div class="timer" id="countdown">
+            <div class="timer-block">
+                <div class="time-val" id="days">00</div>
+                <div class="time-label">Days</div>
+            </div>
+            <div class="timer-block">
+                <div class="time-val" id="hours">00</div>
+                <div class="time-label">Hours</div>
+            </div>
+            <div class="timer-block">
+                <div class="time-val" id="minutes">00</div>
+                <div class="time-label">Mins</div>
+            </div>
+            <div class="timer-block">
+                <div class="time-val" id="seconds">00</div>
+                <div class="time-label">Secs</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="safety" class="safety-section">
+        <div class="section-header">
+            <h2 class="section-title" style="color: var(--neon-red);">SAFETY PROTOCOL</h2>
+            <p class="section-desc" style="color: #ffaaaa;">Kharkiv Security Standards[cite: 306, 308].</p>
+        </div>
+
+        <div class="cards-grid">
+            <div class="glass-card safety-card hover-target">
+                <div class="alert-badge">RED CODE</div>
+                <h3 class="card-title">AIR RAID ALERT</h3>
+                <p class="card-text">
+                    При сигнале "Воздушная тревога" матч <b>мгновенно останавливается</b> (mp_pause_match). Текущий
+                    раунд аннулируется.
+                </p>
+            </div>
+
+            <div class="glass-card safety-card hover-target">
+                <div class="alert-badge">ZERO TOLERANCE</div>
+                <h3 class="card-title">EVACUATION</h3>
+                <p class="card-text">
+                    Все участники обязаны проследовать в <b>сертифицированное укрытие</b>. Отказ от эвакуации =
+                    Дисквалификация.
+                </p>
+            </div>
+
+            <div class="glass-card safety-card hover-target">
+                <div class="alert-badge">STABILITY</div>
+                <h3 class="card-title">BLACKOUT PROOF</h3>
+                <p class="card-text">
+                    Локация оборудована генераторами и Starlink. Турнир продолжится даже при отсутствии городского
+                    света[cite: 310].
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <h2 style="color: #fff; font-family: var(--font-head); margin-bottom: 30px;">PARTNERS</h2>
+        <div class="partners-grid">
+            <div class="partner-logo hover-target">WhiteBIT</div>
+            <div class="partner-logo hover-target">GamePro</div>
+            <div class="partner-logo hover-target">NON STOP</div>
+            <div class="partner-logo hover-target">FIFINE</div>
+        </div>
+        <p style="color: #444; font-size: 0.9rem;">© 2026 UNBREAKABLE PHOENIX. KHARKIV, UKRAINE.</p>
+    </footer>
+
+    <div class="modal-overlay" id="regModal">
+        <div class="modal-box">
+            <span class="close-modal hover-target" onclick="closeModal()">×</span>
+            <h2 style="font-family: var(--font-head); color: var(--gold-primary); margin-bottom: 20px;">TEAM
+                REGISTRATION</h2>
+            <form>
+                <input type="text" class="modal-input hover-target" placeholder="Название Команды" required>
+                <input type="text" class="modal-input hover-target" placeholder="ВУЗ (Харьков)" required>
+                <input type="text" class="modal-input hover-target" placeholder="Telegram Капитана" required>
+                <input type="email" class="modal-input hover-target" placeholder="Email" required>
+                <button type="submit" class="btn-gold hover-target" style="width: 100%;">ОТПРАВИТЬ ЗАЯВКУ</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // --- 1. SVG ANIMATION & SCROLL TRIGGER ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const phoenixSvg = document.getElementById('phoenix-svg');
+
+            // Запуск анимации при загрузке
+            setTimeout(() => {
+                phoenixSvg.classList.add('animate-phoenix');
+            }, 500);
+
+            // Параллакс эффект для мыши
+            document.addEventListener('mousemove', (e) => {
+                const x = (window.innerWidth - e.pageX * 2) / 100;
+                const y = (window.innerHeight - e.pageY * 2) / 100;
+                phoenixSvg.style.transform = `translate(${x}px, ${y}px)`;
+            });
+        });
+
+        // --- 2. PARTICLE SYSTEM (EMBER EFFECT) ---
+        const canvas = document.getElementById('particles');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let particlesArray;
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 0.1; // Мелкие искры
+                this.speedX = Math.random() * 1 - 0.5;
+                this.speedY = Math.random() * 1 - 0.5; // Медленное парение
+                this.color = '#FFD700';
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.size > 0.2) this.size -= 0.01; // Исчезновение
+
+                // Сброс частицы
+                if (this.size <= 0.2 || this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
+                    this.x = Math.random() * canvas.width;
+                    this.y = canvas.height + 10;
+                    this.size = Math.random() * 3 + 1;
+                    this.speedY = Math.random() * -1 - 0.5; // Движение вверх (огонь)
+                }
+            }
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.globalAlpha = this.size / 5; // Прозрачность
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particlesArray = [];
+            for (let i = 0; i < 150; i++) { // 150 частиц
+                particlesArray.push(new Particle());
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+                particlesArray[i].draw();
+            }
+            requestAnimationFrame(animateParticles);
+        }
+
+        initParticles();
+        animateParticles();
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            initParticles();
+        });
+
+        // --- 3. CUSTOM CURSOR LOGIC ---
+        const cursor = document.querySelector('.cursor');
+        const cursorDot = document.querySelector('.cursor-dot');
+        const hoverTargets = document.querySelectorAll('.hover-target');
+
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            cursorDot.style.left = e.clientX + 'px';
+            cursorDot.style.top = e.clientY + 'px';
+        });
+
+        hoverTargets.forEach(target => {
+            target.addEventListener('mouseenter', () => document.body.classList.add('hovered'));
+            target.addEventListener('mouseleave', () => document.body.classList.remove('hovered'));
+        });
+
+        // --- 4. COUNTDOWN TIMER ---
+        const countDownDate = new Date("Nov 1, 2026 12:00:00").getTime();
+
+        const x = setInterval(function () {
+            const now = new Date().getTime();
+            const distance = countDownDate - now;
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById("days").innerText = days;
+            document.getElementById("hours").innerText = hours;
+            document.getElementById("minutes").innerText = minutes;
+            document.getElementById("seconds").innerText = seconds;
+        }, 1000);
+
+        // --- 5. MODAL FUNCTIONS ---
+        function openModal() {
+            document.getElementById('regModal').classList.add('active');
+        }
+        function closeModal() {
+            document.getElementById('regModal').classList.remove('active');
+        }
+    </script>
+</body>
+
+</html>
