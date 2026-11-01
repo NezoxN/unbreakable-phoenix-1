@@ -3,11 +3,11 @@
  * Усі посилання зібрані тут для зручної та швидкої заміни.
  */
 export const TELEGRAM_CAMPAIGN_LINKS = {
-  a1: 'https://t.me/+unbreakable_k1_a', // К1 А (/a1)
-  b1: 'https://t.me/+unbreakable_k1_b', // К1 Б (/b1)
-  a2: 'https://t.me/+unbreakable_k2_a', // К2 А (/a2)
-  b2: 'https://t.me/+unbreakable_k2_b', // К2 Б (/b2)
-  default: 'https://t.me/unbreakable_phoenix_cs2', // Загальне посилання на канал
+  a1: 'https://t.me/+5TuZldr7M6w4Yzhi', // К1 А (/a1)
+  b1: 'https://t.me/+RRJ_ZLuvo-kzODBi', // К1 Б (/b1)
+  a2: 'https://t.me/+LjknrXMO6v5hMmQy', // К2 А (/a2)
+  b2: 'https://t.me/+AxK53TYG49E5OWEy', // К2 Б (/b2)
+  default: 'https://t.me/+N59KNXPfCPdkYTI6', // Загальне посилання на канал
 } as const;
 
 export type CampaignTestKey = 'a1' | 'b1' | 'a2' | 'b2' | 'direct';
