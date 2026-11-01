@@ -252,7 +252,7 @@ body.in-form-zone .cursor-dot {
 }
 
 .animate-phoenix path {
-  animation: draw 8s ease-in-out infinite;
+  animation: draw 6s ease-in-out infinite;
 }
 
 @keyframes draw {
@@ -260,17 +260,17 @@ body.in-form-zone .cursor-dot {
     stroke-dashoffset: 10000;
     filter: drop-shadow(0 0 5px var(--gold-primary));
   }
-  40% {
+  45% {
     stroke-dashoffset: 0;
-    filter: drop-shadow(0 0 8px var(--gold-primary));
+    filter: drop-shadow(0 0 10px var(--gold-primary));
+  }
+  50% {
+    stroke-dashoffset: 0;
+    filter: drop-shadow(0 0 24px #FFD700) drop-shadow(0 0 42px #FF8C00);
   }
   55% {
     stroke-dashoffset: 0;
-    filter: drop-shadow(0 0 22px #FFD700) drop-shadow(0 0 38px #FF8C00);
-  }
-  75% {
-    stroke-dashoffset: 0;
-    filter: drop-shadow(0 0 8px var(--gold-primary));
+    filter: drop-shadow(0 0 10px var(--gold-primary));
   }
   100% {
     stroke-dashoffset: 10000;
