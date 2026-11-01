@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { UKRAINE_VIEWBOX, UKRAINE_PATH, HUB_COORDS } from '../data/ukraineMap';
-import { trackCommunityClick } from '../lib/analytics';
+import { trackSubscribeClick } from '../lib/analytics';
+import { getActiveCampaign } from '../data/campaigns';
 
 interface MapSectionProps {
   onNavigateToUniversities?: () => void;
@@ -19,6 +20,7 @@ const CITY_NODES = [
 ];
 
 export const MapSection: React.FC<MapSectionProps> = () => {
+  const campaign = getActiveCampaign();
   const [selectedCityKey, setSelectedCityKey] = useState<string | null>(null);
 
   const activeNode = CITY_NODES.find((n) => n.key === selectedCityKey);
@@ -83,11 +85,13 @@ export const MapSection: React.FC<MapSectionProps> = () => {
                 {/* Button to community */}
                 <div>
                   <a
-                    href="#community"
-                    onClick={() => trackCommunityClick('join_community', 'map_section')}
-                    className="btn-gold hover-target text-xs tracking-[2px] px-6 py-4 inline-flex items-center justify-between w-full sm:w-auto gap-4"
+                    href={campaign.inviteUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => trackSubscribeClick(campaign.testKey, 'map_section')}
+                    className="btn-gold hover-target text-xs tracking-[2px] px-6 py-4 inline-flex items-center justify-between w-full sm:w-auto gap-4 uppercase font-bold"
                   >
-                    <span>ПРИЄДНАТИСЯ ДО СПІЛЬНОТИ</span>
+                    <span>Підписатися на новини турніру</span>
                     <ArrowRight className="w-4 h-4" />
                   </a>
                 </div>
@@ -121,11 +125,13 @@ export const MapSection: React.FC<MapSectionProps> = () => {
 
                 <div className="pt-2">
                   <a
-                    href="#community"
-                    onClick={() => trackCommunityClick('join_community', `map_city_${activeNode?.key || 'unknown'}`)}
-                    className="btn-gold hover-target text-xs tracking-[2px] px-6 py-4 inline-flex items-center justify-between w-full sm:w-auto gap-4"
+                    href={campaign.inviteUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => trackSubscribeClick(campaign.testKey, `map_city_${activeNode?.key || 'unknown'}`)}
+                    className="btn-gold hover-target text-xs tracking-[2px] px-6 py-4 inline-flex items-center justify-between w-full sm:w-auto gap-4 uppercase font-bold"
                   >
-                    <span>ПРИЄДНАТИСЯ ДО СПІЛЬНОТИ</span>
+                    <span>Підписатися на новини турніру</span>
                     <ArrowRight className="w-4 h-4" />
                   </a>
                 </div>

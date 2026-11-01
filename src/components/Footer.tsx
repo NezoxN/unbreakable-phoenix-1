@@ -1,13 +1,15 @@
 import React from 'react';
 import { Mail } from 'lucide-react';
 import { siteConfig } from '../data/siteConfig';
-import { trackCommunityClick } from '../lib/analytics';
+import { trackSubscribeClick } from '../lib/analytics';
+import { getActiveCampaign } from '../data/campaigns';
 
 interface FooterProps {
   onOpenModal?: () => void;
 }
 
 export const Footer: React.FC<FooterProps> = () => {
+  const campaign = getActiveCampaign();
   return (
     <footer className="relative z-10 bg-[#030303] border-t border-neutral-900 pt-16 pb-12 text-left">
       <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12">
@@ -25,11 +27,13 @@ export const Footer: React.FC<FooterProps> = () => {
             </p>
             <div className="pt-2">
               <a
-                href="#community"
-                onClick={() => trackCommunityClick('join_community', 'footer')}
+                href={campaign.inviteUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => trackSubscribeClick(campaign.testKey, 'footer')}
                 className="btn-gold hover-target text-xs tracking-[2px] px-6 py-2.5 inline-flex items-center uppercase font-head font-bold"
               >
-                ПРИЄДНАТИСЯ ДО СПІЛЬНОТИ
+                Підписатися на новини турніру
               </a>
             </div>
           </div>
@@ -107,15 +111,10 @@ export const Footer: React.FC<FooterProps> = () => {
               </li>
               <li>
                 <a
-                  href="#community"
-                  className="hover-target text-neutral-400 hover:text-[#FFD700] transition-colors"
-                >
-                  Discord сервер
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#community"
+                  href={campaign.inviteUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => trackSubscribeClick(campaign.testKey, 'footer_telegram')}
                   className="hover-target text-neutral-400 hover:text-[#FFD700] transition-colors"
                 >
                   Telegram канал

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Shuffle, Trophy } from 'lucide-react';
-import { trackCommunityClick } from '../lib/analytics';
+import { trackSubscribeClick } from '../lib/analytics';
+import { getActiveCampaign } from '../data/campaigns';
 
 interface StagesPageProps {
   onBack?: () => void;
@@ -19,6 +20,7 @@ const GROUPS = [
 ];
 
 export const StagesPage: React.FC<StagesPageProps> = () => {
+  const campaign = getActiveCampaign();
   return (
     <div className="min-h-screen bg-[#050505] text-white pt-28 pb-32">
       <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 text-left">
@@ -241,11 +243,13 @@ export const StagesPage: React.FC<StagesPageProps> = () => {
           <div className="pt-8 border-t border-neutral-900 flex flex-col sm:flex-row sm:items-center justify-between gap-4 font-mono text-xs text-neutral-500">
             <span>Реєстрація команд відкриється незабаром</span>
             <a
-              href="#community"
-              onClick={() => trackCommunityClick('join_community', 'stages_page')}
+              href={campaign.inviteUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => trackSubscribeClick(campaign.testKey, 'stages_page')}
               className="btn-gold hover-target text-xs tracking-[2px] px-6 py-2.5 self-start sm:self-auto font-head font-bold uppercase inline-flex items-center"
             >
-              ПРИЄДНАТИСЯ ДО СПІЛЬНОТИ
+              Підписатися на новини турніру
             </a>
           </div>
         </div>

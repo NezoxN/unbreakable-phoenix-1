@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
-import { trackCommunityClick } from '../lib/analytics';
+import { trackSubscribeClick } from '../lib/analytics';
+import { getActiveCampaign } from '../data/campaigns';
 
 interface NavigationProps {
   onRegister?: () => void;
@@ -29,6 +30,7 @@ export const Navigation: React.FC<NavigationProps> = ({
   currentRoute = 'home',
   onNavigate,
 }) => {
+  const campaign = getActiveCampaign();
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<string>('');
@@ -179,23 +181,13 @@ export const Navigation: React.FC<NavigationProps> = ({
         {/* Action Buttons Hub */}
         <div className="hidden sm:flex items-center gap-2.5 xl:gap-3 shrink-0 relative justify-end">
           <a
-            href="#community"
-            onClick={(e) => {
-              e.preventDefault();
-              trackCommunityClick('join_community', 'navigation_header');
-              if (currentRoute !== 'home') {
-                if (onNavigate) onNavigate('home');
-                else window.location.hash = '';
-                setTimeout(() => {
-                  document.getElementById('community')?.scrollIntoView({ behavior: 'smooth' });
-                }, 120);
-              } else {
-                document.getElementById('community')?.scrollIntoView({ behavior: 'smooth' });
-              }
-            }}
+            href={campaign.inviteUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => trackSubscribeClick(campaign.testKey, 'navigation_header')}
             className="bg-[#FFD700] text-black font-head font-bold hover:bg-[#ffcc00] hover-target text-xs tracking-[1.5px] px-4 xl:px-5 py-2 transition-colors uppercase shadow-[0_0_15px_rgba(255,215,0,0.25)] whitespace-nowrap"
           >
-            СПІЛЬНОТА
+            Підписатися на новини турніру
           </a>
         </div>
 
@@ -248,24 +240,16 @@ export const Navigation: React.FC<NavigationProps> = ({
             })}
             <div className="pt-4 flex flex-col gap-2.5">
               <a
-                href="#community"
-                onClick={(e) => {
-                  e.preventDefault();
-                  trackCommunityClick('join_community', 'navigation_mobile');
+                href={campaign.inviteUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => {
+                  trackSubscribeClick(campaign.testKey, 'navigation_mobile');
                   setMobileMenuOpen(false);
-                  if (currentRoute !== 'home') {
-                    if (onNavigate) onNavigate('home');
-                    else window.location.hash = '';
-                    setTimeout(() => {
-                      document.getElementById('community')?.scrollIntoView({ behavior: 'smooth' });
-                    }, 120);
-                  } else {
-                    document.getElementById('community')?.scrollIntoView({ behavior: 'smooth' });
-                  }
                 }}
                 className="bg-[#FFD700] text-black font-head font-bold text-center py-3 text-xs tracking-[2px] uppercase"
               >
-                ПРИЄДНАТИСЯ ДО СПІЛЬНОТИ
+                Підписатися на новини турніру
               </a>
             </div>
           </nav>

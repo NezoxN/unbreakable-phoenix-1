@@ -1,8 +1,10 @@
 import React from 'react';
 import { ArrowRight } from 'lucide-react';
-import { trackCommunityClick } from '../lib/analytics';
+import { trackSubscribeClick } from '../lib/analytics';
+import { getActiveCampaign } from '../data/campaigns';
 
 export const ResultsSection: React.FC = () => {
+  const campaign = getActiveCampaign();
   return (
     <section
       id="results"
@@ -42,11 +44,13 @@ export const ResultsSection: React.FC = () => {
 
           <div className="shrink-0 self-start lg:self-center">
             <a
-              href="#community"
-              onClick={() => trackCommunityClick('join_community', 'results_section')}
-              className="btn-gold hover-target inline-flex items-center gap-2.5 text-xs tracking-[2px] px-8 py-4"
+              href={campaign.inviteUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => trackSubscribeClick(campaign.testKey, 'results_section')}
+              className="btn-gold hover-target inline-flex items-center gap-2.5 text-xs tracking-[2px] px-8 py-4 uppercase font-bold"
             >
-              <span>ПРИЄДНАТИСЯ ДО СПІЛЬНОТИ</span>
+              <span>Підписатися на новини турніру</span>
               <ArrowRight className="w-4 h-4" />
             </a>
           </div>

@@ -1,8 +1,10 @@
 import React from 'react';
 import { ArrowRight, Users, UserCheck } from 'lucide-react';
-import { trackCommunityClick } from '../lib/analytics';
+import { trackSubscribeClick } from '../lib/analytics';
+import { getActiveCampaign } from '../data/campaigns';
 
 export const RegistrationSection: React.FC = () => {
+  const campaign = getActiveCampaign();
   return (
     <section
       id="registration"
@@ -72,11 +74,13 @@ export const RegistrationSection: React.FC = () => {
 
             <div className="pt-8 mt-8 border-t border-neutral-850">
               <a
-                href="#community"
-                onClick={() => trackCommunityClick('join_community', 'registration_team')}
+                href={campaign.inviteUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => trackSubscribeClick(campaign.testKey, 'registration_team')}
                 className="btn-gold hover-target w-full py-4 text-xs tracking-[2px] font-bold uppercase inline-flex items-center justify-center gap-2"
               >
-                <span>ПРИЄДНАТИСЯ ДО СПІЛЬНОТИ</span>
+                <span>Підписатися на новини турніру</span>
                 <ArrowRight className="w-4 h-4" />
               </a>
             </div>
@@ -101,7 +105,7 @@ export const RegistrationSection: React.FC = () => {
                   ОДИН (ВІЛЬНИЙ АГЕНТ)
                 </h3>
                 <p className="text-neutral-400 text-base leading-relaxed mt-3">
-                  Не маєш команди? Знаходь тімейтів та капітанів свого університету у нашому Discord та Telegram вже зараз, щоб сформувати сильний ростер до старту.
+                  Не маєш команди? Знаходь тімейтів та капітанів свого університету у нашому Telegram-каналі вже зараз, щоб сформувати сильний ростер до старту.
                 </p>
               </div>
 
@@ -123,11 +127,13 @@ export const RegistrationSection: React.FC = () => {
 
             <div className="pt-8 mt-8 border-t border-neutral-850">
               <a
-                href="#community"
-                onClick={() => trackCommunityClick('join_community', 'registration_solo')}
+                href={campaign.inviteUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => trackSubscribeClick(campaign.testKey, 'registration_solo')}
                 className="btn-gold hover-target w-full py-4 text-xs tracking-[2px] font-bold uppercase inline-flex items-center justify-center gap-2"
               >
-                <span>ПРИЄДНАТИСЯ ДО СПІЛЬНОТИ</span>
+                <span>Підписатися на новини турніру</span>
                 <ArrowRight className="w-4 h-4" />
               </a>
             </div>

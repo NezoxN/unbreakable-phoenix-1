@@ -1,6 +1,7 @@
 import React from 'react';
 import { ArrowRight } from 'lucide-react';
-import { trackCommunityClick } from '../lib/analytics';
+import { trackSubscribeClick } from '../lib/analytics';
+import { getActiveCampaign } from '../data/campaigns';
 
 interface CountdownSectionProps {
   onOpenModal?: () => void;
@@ -16,6 +17,8 @@ const LEAGUE_SLOGANS = [
 ];
 
 export const CountdownSection: React.FC<CountdownSectionProps> = () => {
+  const campaign = getActiveCampaign();
+
   return (
     <section
       id="countdown-section"
@@ -37,11 +40,14 @@ export const CountdownSection: React.FC<CountdownSectionProps> = () => {
 
           <div className="flex flex-wrap items-center gap-4 relative">
             <a
-              href="#community"
-              onClick={() => trackCommunityClick('join_community', 'countdown_banner')}
-              className="btn-gold hover-target inline-flex items-center gap-2.5 text-xs tracking-[2px] px-8 py-4"
+              id="subscribe"
+              href={campaign.inviteUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => trackSubscribeClick(campaign.testKey, 'countdown_banner')}
+              className="btn-gold hover-target inline-flex items-center gap-2.5 text-xs tracking-[2px] px-8 py-4 uppercase font-bold"
             >
-              <span>ПРИЄДНАТИСЯ ДО СПІЛЬНОТИ</span>
+              <span>Підписатися на новини турніру</span>
               <ArrowRight className="w-4 h-4" />
             </a>
           </div>

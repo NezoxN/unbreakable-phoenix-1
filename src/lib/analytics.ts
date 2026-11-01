@@ -10,6 +10,47 @@ declare global {
 }
 
 /**
+ * Ініціалізація тегу кампанії при завантаженні сторінки.
+ * Встановлює clarity("set", "test", "<a1|b1|a2|b2|direct>") для фільтрації сесій у Clarity.
+ */
+export function initCampaignAnalytics(testKey: string): void {
+  try {
+    if (typeof window !== 'undefined') {
+      const applyTag = () => {
+        if (typeof window.clarity === 'function') {
+          window.clarity('set', 'test', testKey);
+        }
+      };
+
+      // Якщо clarity вже ініціалізовано — ставимо тег одразу
+      applyTag();
+
+      // Також страхуємо виклик через невелику затримку, поки скрипт завантажується
+      window.setTimeout(applyTag, 1000);
+      window.setTimeout(applyTag, 3000);
+    }
+  } catch (err) {
+    console.debug('[Clarity] initCampaignAnalytics error:', err);
+  }
+}
+
+/**
+ * Фіксація кліку по кнопці підписки на новини турніру.
+ * Викликає clarity("event", "subscribe_click") та clarity("set", "test", "<a1|b1|a2|b2|direct>").
+ */
+export function trackSubscribeClick(testKey: string, location: string = 'general'): void {
+  try {
+    if (typeof window !== 'undefined' && typeof window.clarity === 'function') {
+      window.clarity('event', 'subscribe_click');
+      window.clarity('set', 'test', testKey);
+      window.clarity('set', 'button_location', location);
+    }
+  } catch (err) {
+    console.debug('[Clarity] trackSubscribeClick error:', err);
+  }
+}
+
+/**
  * Send a custom event to Microsoft Clarity
  */
 export function trackEvent(name: string, data?: Record<string, string | number | boolean>): void {
@@ -23,7 +64,6 @@ export function trackEvent(name: string, data?: Record<string, string | number |
       }
     }
   } catch (err) {
-    // Silently fail without impacting user experience
     console.debug('[Clarity] Event tracking failed:', err);
   }
 }

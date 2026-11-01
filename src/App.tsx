@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { setupScrollDepthTracking } from './lib/analytics';
+import { setupScrollDepthTracking, initCampaignAnalytics } from './lib/analytics';
+import { getActiveCampaign } from './data/campaigns';
 import { AmbientEffects } from './components/AmbientEffects';
 import { Navigation } from './components/Navigation';
 import { HeroSection } from './components/HeroSection';
@@ -11,7 +12,6 @@ import { RegistrationSection } from './components/RegistrationSection';
 import { ScheduleSection } from './components/ScheduleSection';
 import { FairPlaySection } from './components/FairPlaySection';
 import { FaqSection } from './components/FaqSection';
-import { CommunitySection } from './components/CommunitySection';
 import { Footer } from './components/Footer';
 import { ResultsSection } from './components/ResultsSection';
 import { StagesPage } from './pages/StagesPage';
@@ -32,8 +32,13 @@ export const App: React.FC = () => {
   const [currentRoute, setCurrentRoute] = useState<RouteType>(resolveRoute);
 
   useEffect(() => {
+    const campaign = getActiveCampaign();
+    initCampaignAnalytics(campaign.testKey);
+
     const handleLocationChange = () => {
       setCurrentRoute(resolveRoute());
+      const updatedCampaign = getActiveCampaign();
+      initCampaignAnalytics(updatedCampaign.testKey);
     };
 
     window.addEventListener('hashchange', handleLocationChange);
@@ -56,15 +61,15 @@ export const App: React.FC = () => {
       window.location.hash = '/admin';
       setCurrentRoute('admin');
       window.scrollTo({ top: 0, behavior: 'smooth' });
-    } else if (route === 'register' || route === 'community') {
+    } else if (route === 'register') {
       if (currentRoute !== 'home') {
         window.location.hash = '';
         setCurrentRoute('home');
         setTimeout(() => {
-          document.getElementById('community')?.scrollIntoView({ behavior: 'smooth' });
+          document.getElementById('registration')?.scrollIntoView({ behavior: 'smooth' });
         }, 120);
       } else {
-        document.getElementById('community')?.scrollIntoView({ behavior: 'smooth' });
+        document.getElementById('registration')?.scrollIntoView({ behavior: 'smooth' });
       }
     } else {
       window.location.hash = '';
@@ -80,7 +85,6 @@ export const App: React.FC = () => {
 
       {/* Top Navigation */}
       <Navigation
-        onRegister={() => navigateTo('community')}
         currentRoute={currentRoute}
         onNavigate={navigateTo}
       />
@@ -89,7 +93,6 @@ export const App: React.FC = () => {
       {currentRoute === 'stages' ? (
         <StagesPage
           onBack={() => navigateTo('home')}
-          onOpenModal={() => navigateTo('community')}
         />
       ) : currentRoute === 'admin' ? (
         <AdminPage onBack={() => navigateTo('home')} />
@@ -100,7 +103,7 @@ export const App: React.FC = () => {
           <HeroSection />
 
           {/* 2. Overview Banner, Registration Status & Expanded Golden Marquee */}
-          <CountdownSection onOpenModal={() => navigateTo('community')} />
+          <CountdownSection />
 
           {/* 3. Три кроки до сцени & Чесне жеребкування за кошиками */}
           <StepsSection />
@@ -125,14 +128,11 @@ export const App: React.FC = () => {
 
           {/* 10. Відповіді на типові питання (FAQ акордеон) */}
           <FaqSection />
-
-          {/* 11. Приєднуйся до спільноти та став питання наживо */}
-          <CommunitySection />
         </main>
       )}
 
       {/* Footer */}
-      <Footer onOpenModal={() => navigateTo('community')} />
+      <Footer />
     </div>
   );
 };
