@@ -25,9 +25,14 @@ async function request<T>(method: string, path: string, body?: Body): Promise<T>
     throw new ApiError('BACKEND OFFLINE: сервер ліги недоступний. Спробуйте пізніше.', 0);
   }
 
+  const contentType = res.headers.get('content-type') || '';
+  if (!contentType.includes('application/json')) {
+    throw new ApiError('Сервер недоступний або повернув некоректну відповідь.', res.status || 0);
+  }
+
   const data = await res.json().catch(() => ({}));
-  if (!res.ok || data.ok === false) {
-    throw new ApiError(data.message || `Помилка сервера (${res.status}).`, res.status, data.errors);
+  if (!res.ok || !data || data.ok !== true) {
+    throw new ApiError(data?.message || `Помилка сервера (${res.status}).`, res.status, data?.errors);
   }
   return data as T;
 }

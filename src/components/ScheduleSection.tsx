@@ -3,7 +3,7 @@ import { ArrowRight } from 'lucide-react';
 import { seasonStages } from '../data/siteConfig';
 
 export const ScheduleSection: React.FC = () => {
-  const [selectedStageId, setSelectedStageId] = useState<string>(seasonStages[0].id);
+  const [selectedStageId, setSelectedStageId] = useState<string>(seasonStages[0]?.id || 'stage-01');
 
   const selectedStage =
     seasonStages.find((s) => s.id === selectedStageId) || seasonStages[0];
@@ -57,7 +57,7 @@ export const ScheduleSection: React.FC = () => {
           {/* Horizontal Stage Progression Bar */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             {seasonStages.map((stage) => {
-              const isSelected = stage.id === selectedStage.id;
+              const isSelected = stage?.id === selectedStage?.id;
               const hasStageLink = stage.number === '03' || stage.number === '04';
 
               return (

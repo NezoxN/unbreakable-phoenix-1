@@ -41,7 +41,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const refresh = useCallback(async () => {
     try {
       const data = await api.get<MeResponse & { ok: true }>('/me');
-      setMeState({ user: data.user, team: data.team, studentCard: data.studentCard });
+      if (data && data.user) {
+        setMeState({ user: data.user, team: data.team, studentCard: data.studentCard });
+      } else {
+        setMeState(null);
+      }
       setOffline(false);
     } catch (err) {
       if (err instanceof ApiError && err.status === 0) setOffline(true);
@@ -64,7 +68,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, [refresh]);
 
   const setMe = useCallback((data: MeResponse) => {
-    setMeState({ user: data.user, team: data.team, studentCard: data.studentCard });
+    if (data && data.user) {
+      setMeState({ user: data.user, team: data.team, studentCard: data.studentCard });
+    } else {
+      setMeState(null);
+    }
   }, []);
 
   const logout = useCallback(async () => {
@@ -74,7 +82,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   // Запрошення залежать від користувача і його команди
-  const userId = me?.user.id;
+  const userId = me?.user?.id;
   const teamId = me?.team?.id;
   useEffect(() => {
     if (userId) refreshInvites();
