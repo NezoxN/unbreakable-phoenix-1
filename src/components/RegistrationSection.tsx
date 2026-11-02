@@ -42,9 +42,6 @@ export const RegistrationSection: React.FC = () => {
                 <div className="w-12 h-12 bg-[#141414] border border-neutral-800 flex items-center justify-center text-[#FFD700]">
                   <Users className="w-6 h-6" />
                 </div>
-                <span className="font-mono text-xs uppercase tracking-widest text-neutral-400">
-                  ФОРМАТ 01 · СКЛАД ЗВО
-                </span>
               </div>
 
               <div>
@@ -80,7 +77,7 @@ export const RegistrationSection: React.FC = () => {
                 onClick={() => trackSubscribeClick(campaign.testKey, 'registration_team')}
                 className="btn-gold hover-target w-full py-4 text-xs tracking-[2px] font-bold uppercase inline-flex items-center justify-center gap-2"
               >
-                <span>Підписатися на новини турніру</span>
+                <span>Стежити за оновленнями</span>
                 <ArrowRight className="w-4 h-4" />
               </a>
             </div>
@@ -95,9 +92,6 @@ export const RegistrationSection: React.FC = () => {
                 <div className="w-12 h-12 bg-[#141414] border border-neutral-800 flex items-center justify-center text-[#FFD700]">
                   <UserCheck className="w-6 h-6" />
                 </div>
-                <span className="font-mono text-xs uppercase tracking-widest text-neutral-400">
-                  ФОРМАТ 02 · LFT БІРЖА
-                </span>
               </div>
 
               <div>
@@ -133,7 +127,7 @@ export const RegistrationSection: React.FC = () => {
                 onClick={() => trackSubscribeClick(campaign.testKey, 'registration_solo')}
                 className="btn-gold hover-target w-full py-4 text-xs tracking-[2px] font-bold uppercase inline-flex items-center justify-center gap-2"
               >
-                <span>Підписатися на новини турніру</span>
+                <span>Стежити за оновленнями</span>
                 <ArrowRight className="w-4 h-4" />
               </a>
             </div>

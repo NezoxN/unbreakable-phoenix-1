@@ -33,7 +33,7 @@ export const Footer: React.FC<FooterProps> = () => {
                 onClick={() => trackSubscribeClick(campaign.testKey, 'footer')}
                 className="btn-gold hover-target text-xs tracking-[2px] px-6 py-2.5 inline-flex items-center uppercase font-head font-bold"
               >
-                Підписатися на новини турніру
+                Стежити за оновленнями
               </a>
             </div>
           </div>

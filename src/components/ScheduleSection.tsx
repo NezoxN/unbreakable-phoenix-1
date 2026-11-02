@@ -65,10 +65,11 @@ export const ScheduleSection: React.FC = () => {
                   key={stage.id}
                   type="button"
                   onClick={() => setSelectedStageId(stage.id)}
-                  className={`hover-target p-6 sm:p-8 text-left transition-all group relative flex flex-col justify-between ${isSelected
+                  className={`hover-target p-6 sm:p-8 text-left transition-all group relative flex flex-col justify-between min-h-[185px] sm:min-h-[210px] h-full ${
+                    isSelected
                       ? 'bg-[#141414]'
                       : 'bg-[#090909] hover:bg-[#0f0f0f]'
-                    }`}
+                  }`}
                 >
                   <div>
                     {/* Active Top Gold Highlight */}

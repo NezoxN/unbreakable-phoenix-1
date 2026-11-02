@@ -249,7 +249,7 @@ export const StagesPage: React.FC<StagesPageProps> = () => {
               onClick={() => trackSubscribeClick(campaign.testKey, 'stages_page')}
               className="btn-gold hover-target text-xs tracking-[2px] px-6 py-2.5 self-start sm:self-auto font-head font-bold uppercase inline-flex items-center"
             >
-              Підписатися на новини турніру
+              Стежити за оновленнями
             </a>
           </div>
         </div>

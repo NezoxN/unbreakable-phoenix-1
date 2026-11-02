@@ -21,7 +21,7 @@ const navLinks: NavLinkItem[] = [
   { href: '#map', label: 'КАРТА', route: null },
   { href: '#prizes', label: 'ПРИЗИ', route: null },
   { href: '#schedule', label: 'РОЗКЛАД', route: null },
-  { href: '#/stages', label: 'СІТКА', route: 'stages', badge: 'LAN' },
+  { href: '#/stages', label: 'СІТКА', route: 'stages' },
   { href: '#results', label: 'РЕЗУЛЬТАТИ', route: null },
   { href: '#faq', label: 'FAQ', route: null },
 ];
@@ -187,7 +187,7 @@ export const Navigation: React.FC<NavigationProps> = ({
             onClick={() => trackSubscribeClick(campaign.testKey, 'navigation_header')}
             className="bg-[#FFD700] text-black font-head font-bold hover:bg-[#ffcc00] hover-target text-xs tracking-[1.5px] px-4 xl:px-5 py-2 transition-colors uppercase shadow-[0_0_15px_rgba(255,215,0,0.25)] whitespace-nowrap"
           >
-            Підписатися на новини турніру
+            Стежити за оновленнями
           </a>
         </div>
 
@@ -249,7 +249,7 @@ export const Navigation: React.FC<NavigationProps> = ({
                 }}
                 className="bg-[#FFD700] text-black font-head font-bold text-center py-3 text-xs tracking-[2px] uppercase"
               >
-                Підписатися на новини турніру
+                Стежити за оновленнями
               </a>
             </div>
           </nav>

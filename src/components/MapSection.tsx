@@ -91,7 +91,7 @@ export const MapSection: React.FC<MapSectionProps> = () => {
                     onClick={() => trackSubscribeClick(campaign.testKey, 'map_section')}
                     className="btn-gold hover-target text-xs tracking-[2px] px-6 py-4 inline-flex items-center justify-between w-full sm:w-auto gap-4 uppercase font-bold"
                   >
-                    <span>Підписатися на новини турніру</span>
+                    <span>Стежити за оновленнями</span>
                     <ArrowRight className="w-4 h-4" />
                   </a>
                 </div>
@@ -131,7 +131,7 @@ export const MapSection: React.FC<MapSectionProps> = () => {
                     onClick={() => trackSubscribeClick(campaign.testKey, `map_city_${activeNode?.key || 'unknown'}`)}
                     className="btn-gold hover-target text-xs tracking-[2px] px-6 py-4 inline-flex items-center justify-between w-full sm:w-auto gap-4 uppercase font-bold"
                   >
-                    <span>Підписатися на новини турніру</span>
+                    <span>Стежити за оновленнями</span>
                     <ArrowRight className="w-4 h-4" />
                   </a>
                 </div>

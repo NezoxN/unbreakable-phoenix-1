@@ -50,7 +50,7 @@ export const ResultsSection: React.FC = () => {
               onClick={() => trackSubscribeClick(campaign.testKey, 'results_section')}
               className="btn-gold hover-target inline-flex items-center gap-2.5 text-xs tracking-[2px] px-8 py-4 uppercase font-bold"
             >
-              <span>Підписатися на новини турніру</span>
+              <span>Стежити за оновленнями</span>
               <ArrowRight className="w-4 h-4" />
             </a>
           </div>
