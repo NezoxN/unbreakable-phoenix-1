@@ -1,10 +1,17 @@
 /**
- * Конфігурація мікрокампаній та атрибуції переходів у Telegram-бот.
+ * Конфігурація мікрокампаній та атрибуції переходів у Telegram.
+ *
+ * Посилання ведуть на Telegram-канал/групу для кожної кампанії окремо:
+ * - a1: https://t.me/+5TuZldr7M6w4Yzhi
+ * - b1: https://t.me/+RRJ_ZLuvo-kzODBi
+ * - a2: https://t.me/+LjknrXMO6v5hMmQy
+ * - b2: https://t.me/+AxK53TYG49E5OWEy
+ * - default: https://t.me/+N59KNXPfCPdkYTI6
  *
  * Модель «Перше джерело виграє» (First-touch attribution):
  * Якщо користувач прийшов за посиланням /a1, це джерело зберігається в localStorage
  * на 7 днів. Навіть якщо він пізніше відкриє /b1 або зайде напряму, він закріплюється
- * за першим джерелом (a1), і посилання веде на t.me/<BOT>?start=a1, а в Clarity
+ * за першим джерелом (a1), і посилання веде на відповідний лінк каналу a1, а в Clarity
  * відправляється тег "a1".
  */
 
@@ -25,17 +32,27 @@ interface StoredCampaign {
 export const CAMPAIGN_STORAGE_KEY = 'src';
 export const CAMPAIGN_TTL_MS = 7 * 24 * 60 * 60 * 1000; // 7 днів (7 * 864e5)
 
+/**
+ * Прямі посилання на Telegram-групу/канал для кожної мікрокампанії.
+ */
+export const TELEGRAM_CAMPAIGN_LINKS = {
+  a1: 'https://t.me/+N65FReF2GX9lOGM6', // К1 А (/a1)
+  b1: 'https://t.me/+LXIu4QsAL1JlYjhi', // К1 Б (/b1)
+  a2: 'https://t.me/+jsYsKQDSr7k0YWVi', // К2 А (/a2)
+  b2: 'https://t.me/+05ZAcrq7yVk5MzYy', // К2 Б (/b2)
+  default: 'https://t.me/+sjptc0-DcIYyNGVi', // Загальне посилання на канал/групу
+} as const;
+
 const envBot = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_TELEGRAM_BOT_USERNAME) as string | undefined;
 
 /**
- * Юзернейм Telegram-бота (без @). За замовчуванням береться з VITE_TELEGRAM_BOT_USERNAME у .env.
+ * Юзернейм Telegram-бота (на випадок перемикання на бота).
  */
 export const TELEGRAM_BOT_USERNAME =
   (envBot && envBot.trim() !== '' ? envBot.trim().replace(/^@/, '') : 'unbreakable_phoenix_bot');
 
 /**
- * Генерує цільове посилання на бота з параметром start:
- * https://t.me/<BOT_NAME>?start=<source>
+ * Генератор посилання на бота (збережено для майбутнього використання).
  */
 export function getTelegramBotUrl(testKey: CampaignTestKey, botUsername = TELEGRAM_BOT_USERNAME): string {
   const cleanBot = (botUsername || TELEGRAM_BOT_USERNAME).replace(/^@/, '');
@@ -43,15 +60,14 @@ export function getTelegramBotUrl(testKey: CampaignTestKey, botUsername = TELEGR
 }
 
 /**
- * Сумісність для статичних звернень за ключем кампанії.
+ * Повертає посилання на групу відповідно до ключа кампанії.
  */
-export const TELEGRAM_CAMPAIGN_LINKS = {
-  a1: getTelegramBotUrl('a1'),
-  b1: getTelegramBotUrl('b1'),
-  a2: getTelegramBotUrl('a2'),
-  b2: getTelegramBotUrl('b2'),
-  default: getTelegramBotUrl('direct'),
-} as const;
+export function getCampaignInviteUrl(testKey: CampaignTestKey): string {
+  if (testKey === 'direct') {
+    return TELEGRAM_CAMPAIGN_LINKS.default;
+  }
+  return TELEGRAM_CAMPAIGN_LINKS[testKey] || TELEGRAM_CAMPAIGN_LINKS.default;
+}
 
 /**
  * Валідує, чи є рядок допустимою назвою мікрокампанії.
@@ -71,7 +87,7 @@ export function getActiveCampaign(): CampaignInfo {
   if (typeof window === 'undefined') {
     return {
       testKey: 'direct',
-      inviteUrl: getTelegramBotUrl('direct'),
+      inviteUrl: TELEGRAM_CAMPAIGN_LINKS.default,
     };
   }
 
@@ -110,6 +126,6 @@ export function getActiveCampaign(): CampaignInfo {
 
   return {
     testKey: effectiveKey,
-    inviteUrl: getTelegramBotUrl(effectiveKey),
+    inviteUrl: getCampaignInviteUrl(effectiveKey),
   };
 }
