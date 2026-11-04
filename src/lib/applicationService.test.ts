@@ -33,6 +33,9 @@ describe('applicationService', () => {
   });
 
   it('submitApplication saves application to localStorage as fallback', async () => {
+    const mockFetch = vi.fn().mockResolvedValue(new Response(JSON.stringify({ ok: true })));
+    vi.stubGlobal('fetch', mockFetch);
+
     const res = await submitApplication({
       name: 'Іван Франко',
       course: '2 курс',
@@ -55,11 +58,9 @@ describe('applicationService', () => {
     expect(saved[0].sourceLocation).toBe('countdown_banner');
   });
 
-  it('submitApplication calls fetch when VITE_GOOGLE_SCRIPT_URL is provided', async () => {
-    const mockFetch = vi.fn().mockResolvedValue(new Response(JSON.stringify({ status: 'success' })));
+  it('submitApplication sends message to both admin chat IDs via Telegram Bot API', async () => {
+    const mockFetch = vi.fn().mockResolvedValue(new Response(JSON.stringify({ ok: true })));
     vi.stubGlobal('fetch', mockFetch);
-
-    vi.stubEnv('VITE_GOOGLE_SCRIPT_URL', 'https://script.google.com/macros/s/test/exec');
 
     const res = await submitApplication({
       name: 'Тарас Шевченко',
@@ -70,15 +71,16 @@ describe('applicationService', () => {
     });
 
     expect(res.success).toBe(true);
-    expect(mockFetch).toHaveBeenCalledTimes(1);
-    expect(mockFetch).toHaveBeenCalledWith(
-      'https://script.google.com/macros/s/test/exec',
-      expect.objectContaining({
-        method: 'POST',
-        mode: 'no-cors',
-      })
-    );
+    // Sent to 2 admins
+    expect(mockFetch).toHaveBeenCalledTimes(2);
 
-    vi.unstubAllEnvs();
+    const calls = mockFetch.mock.calls;
+    expect(calls[0][0]).toContain('https://api.telegram.org/bot9108140738:AAGjFvh0WeAtKfkMn4xqMIwXlMeymGNp_a0/sendMessage');
+    const body1 = JSON.parse(calls[0][1].body);
+    const body2 = JSON.parse(calls[1][1].body);
+
+    expect(['621012445', '7673176783']).toContain(body1.chat_id);
+    expect(['621012445', '7673176783']).toContain(body2.chat_id);
+    expect(body1.text).toContain('Тарас Шевченко');
   });
 });
