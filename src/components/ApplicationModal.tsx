@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { X, CheckCircle2, ArrowRight, Loader2, User, Mail, GraduationCap, AtSign, Tag } from 'lucide-react';
+import { X, CheckCircle2, ArrowRight, Loader2, User, Mail, GraduationCap, AtSign } from 'lucide-react';
 import { getActiveCampaign } from '../data/campaigns';
 import { submitApplication, generateApplicationId } from '../lib/applicationService';
 
@@ -35,9 +35,8 @@ export const ApplicationModal: React.FC<ApplicationModalProps> = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [isSuccess, setIsSuccess] = useState(false);
-  const [submittedId, setSubmittedId] = useState<string>('');
 
-  // Закриття по Escape та блокування скролу
+  // Закриття по Escape та блокування скролу фонової сторінки
   useEffect(() => {
     if (!isOpen) return;
 
@@ -57,7 +56,7 @@ export const ApplicationModal: React.FC<ApplicationModalProps> = ({
     };
   }, [isOpen, onClose]);
 
-  // Скидання форми при повторному відкритті
+  // Скидання форми при кожному новому відкритті
   useEffect(() => {
     if (isOpen) {
       setIsSuccess(false);
@@ -121,7 +120,6 @@ export const ApplicationModal: React.FC<ApplicationModalProps> = ({
     setIsSubmitting(false);
 
     if (result.success) {
-      setSubmittedId(result.id);
       setIsSuccess(true);
     } else {
       setSubmitError(result.error || 'Помилка збереження. Спробуйте ще раз.');
@@ -140,21 +138,18 @@ export const ApplicationModal: React.FC<ApplicationModalProps> = ({
       aria-modal="true"
       aria-labelledby="apply-modal-title"
       onClick={handleBackdropClick}
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/85 backdrop-blur-md animate-in fade-in duration-200"
+      className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 bg-black/80 backdrop-blur-sm overflow-y-auto"
     >
       <div
         ref={modalRef}
-        className="w-full max-w-lg bg-[#0A0A0A] border border-[#FFD700]/30 shadow-[0_0_50px_rgba(255,215,0,0.15)] relative overflow-hidden text-left"
+        className="relative w-full max-w-lg bg-[#0A0A0A] border border-neutral-800 text-left my-auto shadow-2xl transition-all"
       >
-        {/* Top Accent Strip */}
-        <div className="h-1 w-full bg-gradient-to-r from-transparent via-[#FFD700] to-transparent" />
-
         {/* Close Button */}
         <button
           type="button"
           onClick={onClose}
           aria-label="Закрити модальне вікно"
-          className="absolute top-4 right-4 text-neutral-400 hover:text-[#FFD700] p-1.5 border border-transparent hover:border-neutral-800 transition-colors hover-target"
+          className="absolute top-5 right-5 text-neutral-400 hover:text-white p-1.5 transition-colors cursor-pointer"
         >
           <X className="w-5 h-5" />
         </button>
@@ -162,14 +157,11 @@ export const ApplicationModal: React.FC<ApplicationModalProps> = ({
         {isSuccess ? (
           /* Success Screen */
           <div className="p-8 sm:p-10 text-center space-y-6">
-            <div className="w-16 h-16 mx-auto rounded-full bg-[#FFD700]/10 border border-[#FFD700]/40 flex items-center justify-center text-[#FFD700] shadow-[0_0_25px_rgba(255,215,0,0.2)]">
-              <CheckCircle2 className="w-9 h-9" />
+            <div className="w-16 h-16 mx-auto rounded-full bg-[#121212] border border-neutral-800 flex items-center justify-center text-[#FFD700]">
+              <CheckCircle2 className="w-8 h-8" />
             </div>
 
             <div className="space-y-2">
-              <div className="font-mono text-xs uppercase tracking-[0.25em] text-[#FFD700]">
-                UNBREAKABLE PHOENIX
-              </div>
               <h3
                 id="apply-modal-title"
                 className="font-head text-3xl sm:text-4xl uppercase font-bold text-white tracking-wide"
@@ -180,24 +172,6 @@ export const ApplicationModal: React.FC<ApplicationModalProps> = ({
                 Дякуємо! Твої дані успішно зафіксовані в офіційному реєстрі ліги.
               </p>
             </div>
-
-            {/* Application ID Card */}
-            <div className="bg-[#121212] border border-neutral-800 p-4 space-y-1.5">
-              <div className="font-mono text-[11px] uppercase tracking-wider text-neutral-500">
-                Номер заявки
-              </div>
-              <div className="font-mono text-xl sm:text-2xl font-bold text-[#FFD700] tracking-widest">
-                {submittedId}
-              </div>
-              <div className="font-mono text-[10px] text-neutral-400 flex items-center justify-center gap-1.5 pt-1">
-                <Tag className="w-3 h-3 text-[#FFD700]" />
-                <span>Джерело: <span className="text-white uppercase font-bold">{campaign.testKey}</span></span>
-              </div>
-            </div>
-
-            <p className="text-xs text-neutral-400 leading-relaxed">
-              Обов'язково перейдіть у наш Telegram-канал, щоб не пропустити старт жеребкування, регламент та новини сезону:
-            </p>
 
             <div className="space-y-3 pt-2">
               <a
@@ -214,7 +188,7 @@ export const ApplicationModal: React.FC<ApplicationModalProps> = ({
               <button
                 type="button"
                 onClick={onClose}
-                className="w-full py-3 font-mono text-xs uppercase tracking-wider text-neutral-400 hover:text-white transition-colors"
+                className="w-full py-3 font-mono text-xs uppercase tracking-wider text-neutral-400 hover:text-white transition-colors cursor-pointer"
               >
                 Закрити вікно
               </button>
@@ -223,24 +197,13 @@ export const ApplicationModal: React.FC<ApplicationModalProps> = ({
         ) : (
           /* Application Form Screen */
           <div className="p-6 sm:p-8 space-y-6">
-            <div className="space-y-1">
-              <div className="flex items-center justify-between">
-                <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-[#FFD700] font-bold">
-                  UNBREAKABLE PHOENIX 2026
-                </span>
-                <span className="font-mono text-[10px] uppercase tracking-widest text-neutral-500 bg-neutral-900 border border-neutral-800 px-2 py-0.5">
-                  ID: {campaign.testKey}
-                </span>
-              </div>
+            <div className="border-b border-neutral-850 pb-3">
               <h3
                 id="apply-modal-title"
                 className="font-head text-2xl sm:text-3xl uppercase font-bold text-white tracking-wide"
               >
                 ПОДАТИ ЗАЯВКУ
               </h3>
-              <p className="text-neutral-400 text-xs sm:text-sm">
-                Заповніть форму учасника ліги. Організатори зв'яжуться з вами перед стартом.
-              </p>
             </div>
 
             {submitError && (
@@ -358,23 +321,12 @@ export const ApplicationModal: React.FC<ApplicationModalProps> = ({
                 )}
               </div>
 
-              {/* Unique Identifier Info Card */}
-              <div className="bg-[#121212] border border-neutral-850 px-3.5 py-2.5 flex items-center justify-between text-xs">
-                <span className="font-mono text-neutral-400 flex items-center gap-1.5 text-[11px]">
-                  <Tag className="w-3 h-3 text-[#FFD700]" />
-                  <span>Унікальний ідентифікатор:</span>
-                </span>
-                <span className="font-mono font-bold text-[#FFD700] uppercase text-[11px] bg-black/60 px-2 py-0.5 border border-[#FFD700]/30">
-                  {campaign.testKey}
-                </span>
-              </div>
-
               {/* Submit Button */}
               <div className="pt-2">
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="btn-gold hover-target w-full py-4 text-xs tracking-[2px] font-bold uppercase inline-flex items-center justify-center gap-2 disabled:opacity-50"
+                  className="btn-gold hover-target w-full py-4 text-xs tracking-[2px] font-bold uppercase inline-flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
                 >
                   {isSubmitting ? (
                     <>
