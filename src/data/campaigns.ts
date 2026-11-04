@@ -1,18 +1,19 @@
-﻿/**
+/**
  * Конфігурація мікрокампаній та атрибуції переходів у Telegram.
  *
  * Посилання ведуть на Telegram-канал/групу для кожної кампанії окремо:
- * - a1: https://t.me/+5TuZldr7M6w4Yzhi
- * - b1: https://t.me/+RRJ_ZLuvo-kzODBi
- * - a2: https://t.me/+LjknrXMO6v5hMmQy
- * - b2: https://t.me/+AxK53TYG49E5OWEy
- * - default: https://t.me/+N59KNXPfCPdkYTI6
+ * - a1: https://t.me/+N65FReF2GX9lOGM6
+ * - b1: https://t.me/+LXIu4QsAL1JlYjhi
+ * - a2: https://t.me/+jsYsKQDSr7k0YWVi
+ * - b2: https://t.me/+05ZAcrq7yVk5MzYy
+ * - default: https://t.me/+sjptc0-DcIYyNGVi
  *
- * Модель «Перше джерело виграє» (First-touch attribution):
- * Якщо користувач прийшов за посиланням /a1, це джерело зберігається в localStorage
- * на 7 днів. Навіть якщо він пізніше відкриє /b1 або зайде напряму, він закріплюється
- * за першим джерелом (a1), і посилання веде на відповідний лінк каналу a1, а в Clarity
- * відправляється тег "a1".
+ * Атрибуція джерела:
+ * 1. Якщо користувач переходить за посиланням конкретної кампанії (/a1, /b1, /a2, /b2 або ?src=a1):
+ *    вона стає активною і зберігається в localStorage на 7 днів.
+ * 2. Якщо користувач заходить на головну (/) або без мітки кампанії:
+ *    використовується збережена кампанія з localStorage (протягом 7 днів).
+ * 3. Якщо збереженої кампанії немає — використовується "direct" (загальне посилання).
  */
 
 export const VALID_CAMPAIGNS = ['a1', 'b1', 'a2', 'b2'] as const;
@@ -52,7 +53,7 @@ export const TELEGRAM_BOT_USERNAME =
   (envBot && envBot.trim() !== '' ? envBot.trim().replace(/^@/, '') : 'unbreakable_phoenix_bot');
 
 /**
- * Генератор посилання на бота (збережено для майбутнього використання).
+ * Генератор посилання на бота (збережено для сумісності).
  */
 export function getTelegramBotUrl(testKey: CampaignTestKey, botUsername = TELEGRAM_BOT_USERNAME): string {
   const cleanBot = (botUsername || TELEGRAM_BOT_USERNAME).replace(/^@/, '');
@@ -60,7 +61,7 @@ export function getTelegramBotUrl(testKey: CampaignTestKey, botUsername = TELEGR
 }
 
 /**
- * Повертає посилання на групу відповідно до ключа кампанії.
+ * Повертає індивідуальне посилання на Telegram-канал/групу відповідно до ключа кампанії.
  */
 export function getCampaignInviteUrl(testKey: CampaignTestKey): string {
   if (testKey === 'direct') {
@@ -73,15 +74,16 @@ export function getCampaignInviteUrl(testKey: CampaignTestKey): string {
  * Валідує, чи є рядок допустимою назвою мікрокампанії.
  */
 export function isValidCampaign(key: unknown): key is ValidCampaign {
-  return typeof key === 'string' && (VALID_CAMPAIGNS as readonly string[]).includes(key);
+  return typeof key === 'string' && (VALID_CAMPAIGNS as readonly string[]).includes(key as ValidCampaign);
 }
 
 /**
- * Визначає активну кампанію з First-Touch атрибуцією на 7 днів:
- * 1. Зчитує pathname (наприклад /a1 -> a1).
- * 2. Перевіряє збережений запис у localStorage. Якщо йому менше 7 днів — використовує його.
- * 3. Якщо збереженого немає, але поточний шлях валідний — фіксує його в localStorage на 7 днів.
- * 4. Якщо джерела немає взагалі — повертає 'direct'.
+ * Визначає активну кампанію:
+ * 1. Перевіряє pathname (наприклад /a1, /b1).
+ * 2. Перевіряє search query параметри (?src=a1, ?utm_source=a1, ?campaign=a1, ?c=a1).
+ * 3. Якщо є явна кампанія — зберігає її в localStorage на 7 днів та повертає.
+ * 4. Якщо явної немає — читає localStorage (якщо збережено не пізніше ніж 7 днів тому).
+ * 5. Якщо нічого немає — повертає 'direct' та загальне посилання на канал.
  */
 export function getActiveCampaign(): CampaignInfo {
   if (typeof window === 'undefined') {
@@ -91,13 +93,46 @@ export function getActiveCampaign(): CampaignInfo {
     };
   }
 
-  // 1. Отримуємо шлях з URL (/a1 -> a1)
+  // 1. Зчитуємо шлях з URL (/a1 -> a1)
   const rawPath = window.location.pathname.toLowerCase().replace(/^\/+|\/+$/g, '');
-  const pathSrc: ValidCampaign | null = isValidCampaign(rawPath) ? rawPath : null;
+  let explicitCampaign: ValidCampaign | null = isValidCampaign(rawPath) ? rawPath : null;
 
+  // 2. Якщо в шляху немає, перевіряємо query-параметри
+  if (!explicitCampaign) {
+    try {
+      const searchParams = new URLSearchParams(window.location.search);
+      const queryVal = (
+        searchParams.get('src') ||
+        searchParams.get('utm_source') ||
+        searchParams.get('campaign') ||
+        searchParams.get('c') ||
+        ''
+      ).toLowerCase();
+      if (isValidCampaign(queryVal)) {
+        explicitCampaign = queryVal;
+      }
+    } catch {
+      // ignore query parsing errors
+    }
+  }
+
+  // 3. Якщо виявлено явну кампанію за посиланням — оновлюємо збережені дані
+  if (explicitCampaign) {
+    try {
+      const payload: StoredCampaign = { s: explicitCampaign, t: Date.now() };
+      window.localStorage.setItem(CAMPAIGN_STORAGE_KEY, JSON.stringify(payload));
+    } catch (err) {
+      console.debug('[Campaigns] localStorage write error:', err);
+    }
+
+    return {
+      testKey: explicitCampaign,
+      inviteUrl: getCampaignInviteUrl(explicitCampaign),
+    };
+  }
+
+  // 4. Якщо явної кампанії в поточному URL немає — читаємо збережену з localStorage
   let savedSrc: ValidCampaign | null = null;
-
-  // 2. Зчитуємо збережене значення з localStorage
   try {
     const raw = window.localStorage.getItem(CAMPAIGN_STORAGE_KEY);
     if (raw) {
@@ -111,18 +146,11 @@ export function getActiveCampaign(): CampaignInfo {
         savedSrc = parsed.s;
       }
     }
-
-    // 3. Якщо дійсного збереженого немає, а поточний шлях валідний — зберігаємо його
-    if (!savedSrc && pathSrc) {
-      const payload: StoredCampaign = { s: pathSrc, t: Date.now() };
-      window.localStorage.setItem(CAMPAIGN_STORAGE_KEY, JSON.stringify(payload));
-    }
   } catch (err) {
-    console.debug('[Campaigns] localStorage attribution error:', err);
+    console.debug('[Campaigns] localStorage read error:', err);
   }
 
-  // 4. Перше джерело виграє (savedSrc має пріоритет над новим шляхом)
-  const effectiveKey: CampaignTestKey = savedSrc || pathSrc || 'direct';
+  const effectiveKey: CampaignTestKey = savedSrc || 'direct';
 
   return {
     testKey: effectiveKey,

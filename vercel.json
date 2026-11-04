@@ -1,8 +1,15 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "vite",
+  "buildCommand": "vite build",
+  "outputDirectory": "dist",
   "cleanUrls": true,
   "trailingSlash": false,
   "rewrites": [
+    {
+      "source": "/(a1|b1|a2|b2)",
+      "destination": "/index.html"
+    },
     {
       "source": "/(.*)",
       "destination": "/index.html"
