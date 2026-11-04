@@ -6,6 +6,7 @@ import { getActiveCampaign } from '../data/campaigns';
 interface StagesPageProps {
   onBack?: () => void;
   onOpenModal?: () => void;
+  onOpenApply?: (source?: string) => void;
 }
 
 const GROUPS = [
@@ -19,7 +20,7 @@ const GROUPS = [
   { name: 'Група H', a: 'Університет A8', b: 'Університет B8', c: 'Університет C8' },
 ];
 
-export const StagesPage: React.FC<StagesPageProps> = () => {
+export const StagesPage: React.FC<StagesPageProps> = ({ onOpenApply }) => {
   const campaign = getActiveCampaign();
   return (
     <div className="min-h-screen bg-[#050505] text-white pt-28 pb-32">
@@ -242,15 +243,16 @@ export const StagesPage: React.FC<StagesPageProps> = () => {
           {/* Understated Bottom Signoff */}
           <div className="pt-8 border-t border-neutral-900 flex flex-col sm:flex-row sm:items-center justify-between gap-4 font-mono text-xs text-neutral-500">
             <span>Реєстрація команд відкриється незабаром</span>
-            <a
-              href={campaign.inviteUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => trackSubscribeClick(campaign.testKey, 'stages_page')}
-              className="btn-gold hover-target text-xs tracking-[2px] px-6 py-2.5 self-start sm:self-auto font-head font-bold uppercase inline-flex items-center"
+            <button
+              type="button"
+              onClick={() => {
+                trackSubscribeClick(campaign.testKey, 'stages_page');
+                onOpenApply?.('stages_page');
+              }}
+              className="btn-gold hover-target text-xs tracking-[2px] px-6 py-2.5 self-start sm:self-auto font-head font-bold uppercase inline-flex items-center cursor-pointer"
             >
-              Стежити за оновленнями
-            </a>
+              Подати заявку
+            </button>
           </div>
         </div>
       </div>

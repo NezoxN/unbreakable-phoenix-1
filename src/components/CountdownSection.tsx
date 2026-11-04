@@ -5,6 +5,7 @@ import { getActiveCampaign } from '../data/campaigns';
 
 interface CountdownSectionProps {
   onOpenModal?: () => void;
+  onOpenApply?: (source?: string) => void;
 }
 
 const LEAGUE_SLOGANS = [
@@ -16,7 +17,7 @@ const LEAGUE_SLOGANS = [
   'FROM ASHES TO GLORY',
 ];
 
-export const CountdownSection: React.FC<CountdownSectionProps> = () => {
+export const CountdownSection: React.FC<CountdownSectionProps> = ({ onOpenApply }) => {
   const campaign = getActiveCampaign();
 
   return (
@@ -39,17 +40,18 @@ export const CountdownSection: React.FC<CountdownSectionProps> = () => {
           </div>
 
           <div className="flex flex-wrap items-center gap-4 relative">
-            <a
+            <button
               id="subscribe"
-              href={campaign.inviteUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => trackSubscribeClick(campaign.testKey, 'countdown_banner')}
-              className="btn-gold hover-target inline-flex items-center gap-2.5 text-xs tracking-[2px] px-8 py-4 uppercase font-bold"
+              type="button"
+              onClick={() => {
+                trackSubscribeClick(campaign.testKey, 'countdown_banner');
+                onOpenApply?.('countdown_banner');
+              }}
+              className="btn-gold hover-target inline-flex items-center gap-2.5 text-xs tracking-[2px] px-8 py-4 uppercase font-bold cursor-pointer"
             >
-              <span>Стежити за оновленнями</span>
+              <span>Подати заявку</span>
               <ArrowRight className="w-4 h-4" />
-            </a>
+            </button>
           </div>
         </div>
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+﻿import React, { useEffect, useRef } from 'react';
 import { ShieldCheck, Clock, HeartHandshake } from 'lucide-react';
 import { fairPlayRules } from '../data/siteConfig';
 import { trackRulesReached } from '../lib/analytics';

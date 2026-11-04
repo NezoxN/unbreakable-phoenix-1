@@ -1,4 +1,4 @@
-/** Помилка API у форматі сервера: `{ ok: false, message, errors }` */
+﻿/** Помилка API у форматі сервера: `{ ok: false, message, errors }` */
 export class ApiError extends Error {
   constructor(
     message: string,

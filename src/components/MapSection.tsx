@@ -6,6 +6,7 @@ import { getActiveCampaign } from '../data/campaigns';
 
 interface MapSectionProps {
   onNavigateToUniversities?: () => void;
+  onOpenApply?: (source?: string) => void;
 }
 
 const CITY_NODES = [
@@ -19,7 +20,7 @@ const CITY_NODES = [
   { key: 'zaporizhzhia', city: 'ЗАПОРІЖЖЯ', coords: HUB_COORDS.zaporizhzhia },
 ];
 
-export const MapSection: React.FC<MapSectionProps> = () => {
+export const MapSection: React.FC<MapSectionProps> = ({ onOpenApply }) => {
   const campaign = getActiveCampaign();
   const [selectedCityKey, setSelectedCityKey] = useState<string | null>(null);
 
@@ -82,18 +83,19 @@ export const MapSection: React.FC<MapSectionProps> = () => {
                   <span>Клікніть на місто на карті</span>
                 </div>
 
-                {/* Button to community */}
+                {/* Button to apply */}
                 <div>
-                  <a
-                    href={campaign.inviteUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={() => trackSubscribeClick(campaign.testKey, 'map_section')}
-                    className="btn-gold hover-target text-xs tracking-[2px] px-6 py-4 inline-flex items-center justify-between w-full sm:w-auto gap-4 uppercase font-bold"
+                  <button
+                    type="button"
+                    onClick={() => {
+                      trackSubscribeClick(campaign.testKey, 'map_section');
+                      onOpenApply?.('map_section');
+                    }}
+                    className="btn-gold hover-target text-xs tracking-[2px] px-6 py-4 inline-flex items-center justify-between w-full sm:w-auto gap-4 uppercase font-bold cursor-pointer"
                   >
-                    <span>Стежити за оновленнями</span>
+                    <span>Подати заявку</span>
                     <ArrowRight className="w-4 h-4" />
-                  </a>
+                  </button>
                 </div>
               </div>
             ) : (
@@ -124,16 +126,17 @@ export const MapSection: React.FC<MapSectionProps> = () => {
                 </div>
 
                 <div className="pt-2">
-                  <a
-                    href={campaign.inviteUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={() => trackSubscribeClick(campaign.testKey, `map_city_${activeNode?.key || 'unknown'}`)}
-                    className="btn-gold hover-target text-xs tracking-[2px] px-6 py-4 inline-flex items-center justify-between w-full sm:w-auto gap-4 uppercase font-bold"
+                  <button
+                    type="button"
+                    onClick={() => {
+                      trackSubscribeClick(campaign.testKey, `map_city_${activeNode?.key || 'unknown'}`);
+                      onOpenApply?.(`map_city_${activeNode?.key || 'unknown'}`);
+                    }}
+                    className="btn-gold hover-target text-xs tracking-[2px] px-6 py-4 inline-flex items-center justify-between w-full sm:w-auto gap-4 uppercase font-bold cursor-pointer"
                   >
-                    <span>Стежити за оновленнями</span>
+                    <span>Подати заявку</span>
                     <ArrowRight className="w-4 h-4" />
-                  </a>
+                  </button>
                 </div>
               </div>
             )}

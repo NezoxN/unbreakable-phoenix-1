@@ -6,9 +6,10 @@ import { getActiveCampaign } from '../data/campaigns';
 
 interface FooterProps {
   onOpenModal?: () => void;
+  onOpenApply?: (source?: string) => void;
 }
 
-export const Footer: React.FC<FooterProps> = () => {
+export const Footer: React.FC<FooterProps> = ({ onOpenApply }) => {
   const campaign = getActiveCampaign();
   return (
     <footer className="relative z-10 bg-[#030303] border-t border-neutral-900 pt-16 pb-12 text-left">
@@ -26,15 +27,16 @@ export const Footer: React.FC<FooterProps> = () => {
               {siteConfig.brand.league}
             </p>
             <div className="pt-2">
-              <a
-                href={campaign.inviteUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => trackSubscribeClick(campaign.testKey, 'footer')}
-                className="btn-gold hover-target text-xs tracking-[2px] px-6 py-2.5 inline-flex items-center uppercase font-head font-bold"
+              <button
+                type="button"
+                onClick={() => {
+                  trackSubscribeClick(campaign.testKey, 'footer');
+                  onOpenApply?.('footer');
+                }}
+                className="btn-gold hover-target text-xs tracking-[2px] px-6 py-2.5 inline-flex items-center uppercase font-head font-bold cursor-pointer"
               >
-                Стежити за оновленнями
-              </a>
+                Подати заявку
+              </button>
             </div>
           </div>
 

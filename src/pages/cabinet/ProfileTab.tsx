@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import { Pencil, RefreshCw, Save, ShieldCheck, Trophy } from 'lucide-react';
 import { api, startDiscordLink } from '../../lib/api';
 import { useAuth } from '../../context/AuthContext';

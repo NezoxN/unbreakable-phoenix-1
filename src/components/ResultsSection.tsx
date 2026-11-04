@@ -3,7 +3,11 @@ import { ArrowRight } from 'lucide-react';
 import { trackSubscribeClick } from '../lib/analytics';
 import { getActiveCampaign } from '../data/campaigns';
 
-export const ResultsSection: React.FC = () => {
+interface ResultsSectionProps {
+  onOpenApply?: (source?: string) => void;
+}
+
+export const ResultsSection: React.FC<ResultsSectionProps> = ({ onOpenApply }) => {
   const campaign = getActiveCampaign();
   return (
     <section
@@ -43,16 +47,17 @@ export const ResultsSection: React.FC = () => {
           </div>
 
           <div className="shrink-0 self-start lg:self-center">
-            <a
-              href={campaign.inviteUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => trackSubscribeClick(campaign.testKey, 'results_section')}
-              className="btn-gold hover-target inline-flex items-center gap-2.5 text-xs tracking-[2px] px-8 py-4 uppercase font-bold"
+            <button
+              type="button"
+              onClick={() => {
+                trackSubscribeClick(campaign.testKey, 'results_section');
+                onOpenApply?.('results_section');
+              }}
+              className="btn-gold hover-target inline-flex items-center gap-2.5 text-xs tracking-[2px] px-8 py-4 uppercase font-bold cursor-pointer"
             >
-              <span>Стежити за оновленнями</span>
+              <span>Подати заявку</span>
               <ArrowRight className="w-4 h-4" />
-            </a>
+            </button>
           </div>
         </div>
       </div>

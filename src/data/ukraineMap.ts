@@ -1,4 +1,4 @@
-// High-precision unified Ukraine outline (incl. Crimea), 532 pts DP-simplified from official GeoJSON.
+﻿// High-precision unified Ukraine outline (incl. Crimea), 532 pts DP-simplified from official GeoJSON.
 export const UKRAINE_VIEWBOX = '0 0 1000 672';
 
 export const UKRAINE_PATH =

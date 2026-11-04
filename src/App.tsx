@@ -16,6 +16,7 @@ import { Footer } from './components/Footer';
 import { ResultsSection } from './components/ResultsSection';
 import { StagesPage } from './pages/StagesPage';
 import { AdminPage } from './pages/AdminPage';
+import { ApplicationModal } from './components/ApplicationModal';
 
 type RouteType = 'home' | 'stages' | 'admin';
 
@@ -30,6 +31,17 @@ function resolveRoute(): RouteType {
 
 export const App: React.FC = () => {
   const [currentRoute, setCurrentRoute] = useState<RouteType>(resolveRoute);
+  const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
+  const [applyModalSource, setApplyModalSource] = useState<string>('direct');
+
+  const openApplyModal = (source?: string) => {
+    if (source) setApplyModalSource(source);
+    setIsApplyModalOpen(true);
+  };
+
+  const closeApplyModal = () => {
+    setIsApplyModalOpen(false);
+  };
 
   useEffect(() => {
     const campaign = getActiveCampaign();
@@ -87,12 +99,14 @@ export const App: React.FC = () => {
       <Navigation
         currentRoute={currentRoute}
         onNavigate={navigateTo}
+        onOpenApply={openApplyModal}
       />
 
       {/* Route-Based Content Rendering */}
       {currentRoute === 'stages' ? (
         <StagesPage
           onBack={() => navigateTo('home')}
+          onOpenApply={openApplyModal}
         />
       ) : currentRoute === 'admin' ? (
         <AdminPage onBack={() => navigateTo('home')} />
@@ -103,25 +117,25 @@ export const App: React.FC = () => {
           <HeroSection />
 
           {/* 2. Overview Banner, Registration Status & Expanded Golden Marquee */}
-          <CountdownSection />
+          <CountdownSection onOpenApply={openApplyModal} />
 
           {/* 3. Три кроки до сцени & Чесне жеребкування за кошиками */}
           <StepsSection />
 
           {/* 4. Одна ліга — вся Україна & Інтерактивна мапа хабів з інтегрованими ЗВО */}
-          <MapSection />
+          <MapSection onOpenApply={openApplyModal} />
 
           {/* 5. Граєш не лише за честь: призовий фонд 100 000 ₴ та девайси (тонкі 3px лінії) */}
           <PrizesSection />
 
           {/* 6. Офіційна реєстрація: блок зі статусом СКОРО */}
-          <RegistrationSection />
+          <RegistrationSection onOpenApply={openApplyModal} />
 
           {/* 7. Розклад турніру (календар сезону) */}
           <ScheduleSection />
 
           {/* 8. Окремий блок «Результати турніру: СКОРО» */}
-          <ResultsSection />
+          <ResultsSection onOpenApply={openApplyModal} />
 
           {/* 9. Чесний турнір — справжній чемпіон (Fair Play) */}
           <FairPlaySection />
@@ -132,7 +146,14 @@ export const App: React.FC = () => {
       )}
 
       {/* Footer */}
-      <Footer />
+      <Footer onOpenApply={openApplyModal} />
+
+      {/* Application Popup Modal */}
+      <ApplicationModal
+        isOpen={isApplyModalOpen}
+        onClose={closeApplyModal}
+        initialSource={applyModalSource}
+      />
     </div>
   );
 };

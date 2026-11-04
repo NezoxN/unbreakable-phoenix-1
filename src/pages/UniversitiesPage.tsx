@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+﻿import React, { useState, useMemo } from 'react';
 import { Search, School, UserPlus, MapPin, ExternalLink } from 'lucide-react';
 import { universities } from '../data/siteConfig';
 

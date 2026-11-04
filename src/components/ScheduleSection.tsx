@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { seasonStages } from '../data/siteConfig';
 

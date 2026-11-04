@@ -3,7 +3,11 @@ import { ArrowRight, Users, UserCheck } from 'lucide-react';
 import { trackSubscribeClick } from '../lib/analytics';
 import { getActiveCampaign } from '../data/campaigns';
 
-export const RegistrationSection: React.FC = () => {
+interface RegistrationSectionProps {
+  onOpenApply?: (source?: string) => void;
+}
+
+export const RegistrationSection: React.FC<RegistrationSectionProps> = ({ onOpenApply }) => {
   const campaign = getActiveCampaign();
   return (
     <section
@@ -70,16 +74,17 @@ export const RegistrationSection: React.FC = () => {
             </div>
 
             <div className="pt-8 mt-8 border-t border-neutral-850">
-              <a
-                href={campaign.inviteUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => trackSubscribeClick(campaign.testKey, 'registration_team')}
-                className="btn-gold hover-target w-full py-4 text-xs tracking-[2px] font-bold uppercase inline-flex items-center justify-center gap-2"
+              <button
+                type="button"
+                onClick={() => {
+                  trackSubscribeClick(campaign.testKey, 'registration_team');
+                  onOpenApply?.('registration_team');
+                }}
+                className="btn-gold hover-target w-full py-4 text-xs tracking-[2px] font-bold uppercase inline-flex items-center justify-center gap-2 cursor-pointer"
               >
-                <span>Стежити за оновленнями</span>
+                <span>Подати заявку</span>
                 <ArrowRight className="w-4 h-4" />
-              </a>
+              </button>
             </div>
           </div>
 
@@ -120,16 +125,17 @@ export const RegistrationSection: React.FC = () => {
             </div>
 
             <div className="pt-8 mt-8 border-t border-neutral-850">
-              <a
-                href={campaign.inviteUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => trackSubscribeClick(campaign.testKey, 'registration_solo')}
-                className="btn-gold hover-target w-full py-4 text-xs tracking-[2px] font-bold uppercase inline-flex items-center justify-center gap-2"
+              <button
+                type="button"
+                onClick={() => {
+                  trackSubscribeClick(campaign.testKey, 'registration_solo');
+                  onOpenApply?.('registration_solo');
+                }}
+                className="btn-gold hover-target w-full py-4 text-xs tracking-[2px] font-bold uppercase inline-flex items-center justify-center gap-2 cursor-pointer"
               >
-                <span>Стежити за оновленнями</span>
+                <span>Подати заявку</span>
                 <ArrowRight className="w-4 h-4" />
-              </a>
+              </button>
             </div>
           </div>
         </div>

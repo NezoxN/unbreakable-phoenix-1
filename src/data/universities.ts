@@ -1,4 +1,4 @@
-import type { UniversityItem } from '../types';
+﻿import type { UniversityItem } from '../types';
 
 /** Без залежностей від import.meta.env — файл імпортується і сервером (seed, валідація пошти). */
 export const universities: UniversityItem[] = [

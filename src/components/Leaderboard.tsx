@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import { api, qs } from '../lib/api';
 import { Notice, Spinner, smallInputClass } from './ui';
 import type { LeaderboardEntry } from '../types';

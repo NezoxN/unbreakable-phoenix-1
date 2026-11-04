@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Loader2 } from 'lucide-react';
 import { ApiError } from '../lib/api';
 import type { CS2Role, VerificationStatus } from '../types';

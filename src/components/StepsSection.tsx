@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { steps, drawStats } from '../data/siteConfig';
 
 export const StepsSection: React.FC = () => {

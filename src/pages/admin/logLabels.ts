@@ -1,4 +1,4 @@
-/** Людські назви дій з журналу адміністраторів (server/routes/admin.ts → log()) */
+﻿/** Людські назви дій з журналу адміністраторів (server/routes/admin.ts → log()) */
 export const LOG_LABELS: Record<string, string> = {
   'verification.approve': 'Підтвердив студента',
   'verification.reject': 'Відхилив студентський',

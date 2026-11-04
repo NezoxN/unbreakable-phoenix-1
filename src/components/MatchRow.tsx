@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { formatDate, mapLabel } from './ui';
 import type { MatchItem } from '../types';
 

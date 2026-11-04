@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { ArrowRight, Handshake } from 'lucide-react';
 import { partnerSlots, mailto } from '../data/siteConfig';
 

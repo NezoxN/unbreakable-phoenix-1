@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { Plus, Minus } from 'lucide-react';
 import { faqItems } from '../data/siteConfig';
 

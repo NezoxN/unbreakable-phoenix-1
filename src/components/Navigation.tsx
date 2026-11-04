@@ -7,6 +7,7 @@ interface NavigationProps {
   onRegister?: () => void;
   currentRoute?: string;
   onNavigate?: (route: string) => void;
+  onOpenApply?: (source?: string) => void;
 }
 
 interface NavLinkItem {
@@ -29,6 +30,7 @@ const navLinks: NavLinkItem[] = [
 export const Navigation: React.FC<NavigationProps> = ({
   currentRoute = 'home',
   onNavigate,
+  onOpenApply,
 }) => {
   const campaign = getActiveCampaign();
   const [scrolled, setScrolled] = useState(false);
@@ -180,15 +182,16 @@ export const Navigation: React.FC<NavigationProps> = ({
 
         {/* Action Buttons Hub */}
         <div className="hidden sm:flex items-center gap-2.5 xl:gap-3 shrink-0 relative justify-end">
-          <a
-            href={campaign.inviteUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() => trackSubscribeClick(campaign.testKey, 'navigation_header')}
-            className="bg-[#FFD700] text-black font-head font-bold hover:bg-[#ffcc00] hover-target text-xs tracking-[1.5px] px-4 xl:px-5 py-2 transition-colors uppercase shadow-[0_0_15px_rgba(255,215,0,0.25)] whitespace-nowrap"
+          <button
+            type="button"
+            onClick={() => {
+              trackSubscribeClick(campaign.testKey, 'navigation_header');
+              onOpenApply?.('navigation_header');
+            }}
+            className="bg-[#FFD700] text-black font-head font-bold hover:bg-[#ffcc00] hover-target text-xs tracking-[1.5px] px-4 xl:px-5 py-2 transition-colors uppercase shadow-[0_0_15px_rgba(255,215,0,0.25)] whitespace-nowrap cursor-pointer"
           >
-            Стежити за оновленнями
-          </a>
+            Подати заявку
+          </button>
         </div>
 
         {/* Mobile Menu Trigger */}
@@ -239,18 +242,17 @@ export const Navigation: React.FC<NavigationProps> = ({
               );
             })}
             <div className="pt-4 flex flex-col gap-2.5">
-              <a
-                href={campaign.inviteUrl}
-                target="_blank"
-                rel="noopener noreferrer"
+              <button
+                type="button"
                 onClick={() => {
                   trackSubscribeClick(campaign.testKey, 'navigation_mobile');
                   setMobileMenuOpen(false);
+                  onOpenApply?.('navigation_mobile');
                 }}
-                className="bg-[#FFD700] text-black font-head font-bold text-center py-3 text-xs tracking-[2px] uppercase"
+                className="bg-[#FFD700] text-black font-head font-bold text-center py-3 text-xs tracking-[2px] uppercase w-full cursor-pointer"
               >
-                Стежити за оновленнями
-              </a>
+                Подати заявку
+              </button>
             </div>
           </nav>
         </div>

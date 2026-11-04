@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { prizeFund, prizePlaces } from '../data/siteConfig';
 
 export const PrizesSection: React.FC = () => {

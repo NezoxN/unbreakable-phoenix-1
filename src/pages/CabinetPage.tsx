@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { Shield, LogOut } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { LoginPanel } from '../components/LoginPanel';
